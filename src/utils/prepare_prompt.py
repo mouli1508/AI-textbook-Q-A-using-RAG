@@ -1,6 +1,9 @@
 
 
 def prepare_system_prompt(user_info, chat_summary, chat_history):
+    user_info = ""
+    chat_summary = ""
+    chat_history = ""
     prompt = """You are a professional assistant of the following user.
 
     {user_info}
@@ -21,7 +24,8 @@ def prepare_system_prompt(user_info, chat_summary, chat_history):
     )
 
 
-def prepare_system_prompt_for_agentic_v1(user_info: str, chat_summary: str, chat_history: str, search_result_section: str) -> str:
+def prepare_system_prompt_for_agentic_chatbot_v1(user_info: str, chat_summary: str, chat_history: str, search_result_section: str) -> str:
+
     prompt = """## You are a professional assistant of the following user.
 
     {user_info}
@@ -34,21 +38,23 @@ def prepare_system_prompt_for_agentic_v1(user_info: str, chat_summary: str, chat
 
     {chat_history}
 
-    ## You also have access to two functions: `search_chat_history` and `add_user_info_to_database`. In case to answer the user's question,
-    you need more info about the user or what was discussed in the previous conversation, you can use the `search_chat_history` function. You also have access to 
-    the `add_user_info_to_database` function to add new information to the user's database. if the user provides you with any of the following information that is different
-    from what has been provided to you in the beginning, call that function to update the user's info database:
-    function to update the user's info database:
+    ## You have access to two functions: search_chat_history and add_user_info_to_database.
 
-    name: str
-    last_name: str
-    age: int
-    gender: str
-    location: str
-    occupation: str
-    interests: list[str]
+    - If you need more information about the user or details from previous conversations to answer the user's question, use the search_chat_history function.
+    - Monitor the conversation, and if the user provides any of the following details that differ from the initial information, call this function to update 
+    the user's database record.
+
+    ### Keys for Updating the User's Information:
+
+    - name: str
+    - last_name: str
+    - age: int
+    - gender: str
+    - location: str
+    - occupation: str
+    - interests: list[str]
     
-    Remember the function expectes a dictionary as input, so prepare the right key-value pairs.
+    Important: The add_user_info_to_database function expects a dictionary as input. Ensure you provide the correct key-value pairs when calling it.
 
     {search_result_section}
     """

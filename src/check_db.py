@@ -1,6 +1,7 @@
 import sqlite3
 import pandas as pd
 from pyprojroot import here
+from IPython.display import display
 
 # Database file
 DB_PATH = here("data/chatbot.db")
@@ -39,8 +40,8 @@ def load_database():
 
 tables_dict = load_database()
 
-tables_dict["user_info"]
+display(tables_dict["user_info"])
 
-tables_dict["chat_history"]
+display(tables_dict["chat_history"])
 
-tables_dict["summary"]["summary_text"].iloc[-1]
+display(tables_dict["summary"])

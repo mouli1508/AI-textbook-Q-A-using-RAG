@@ -6,8 +6,8 @@ class Config:
     def __init__(self):
         with open(here("config/config.yml"), "r") as f:
             config = load(f, Loader=Loader)
-        self.db_path = config["directories"]["db_path"]
-        self.vectordb_dir = config["directories"]["vectordb_dir"]
+        self.db_path = here(config["directories"]["db_path"])
+        self.vectordb_dir = here(config["directories"]["vectordb_dir"])
         self.chat_model = config["llm_config"]["chat_model"]
         self.summary_model = config["llm_config"]["summary_model"]
         self.temperature = config["llm_config"]["temperature"]

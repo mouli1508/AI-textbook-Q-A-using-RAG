@@ -6,7 +6,7 @@ from utils.database_manager import DatabaseManager
 from utils.user_manager import UserManager
 from utils.chat_history_manager import ChatHistoryManager
 from utils.search_manager import SearchManager
-from utils.prepare_prompt import prepare_system_prompt_for_agentic_v1
+from utils.prepare_prompt import prepare_system_prompt_for_agentic_chatbot_v1
 from utils.utils import Utils
 from utils.config import Config
 from traceback import format_exc
@@ -52,17 +52,32 @@ class Chatbot:
         function_call_count = 0  # Track function calls
         while chat_state != "finished":
             try:
-                if function_result:
-                    search_result_section = f"""## If you see this section, it means you have just requested a search based on the most recent user's question.
-                    The search term that you requested was {search_term["search_term"]}. Here is the result of the search for that word on chat history database:\n {function_result}"""
+                if isinstance(function_result, str):
+                    search_result_section = f"""## Search Result:\n"
+                    If you see this section, it means you have just requested a search based on the most recent user's question.
+                    The search term you requested was: {search_term['search_term']}.
+                    Here is the result of the search from the chat history database:\n{function_result}"""
 
                 elif function_call_count >= self.cfg.max_function_calls and function_result == []:
-                    search_result_section = f"""## You have requested a search multiple times for the term: {search_term["search_term"]}, based on the most recent user's question. However, no results were found. 
-                    Please conclude the conversation with the user based on what you have."""
-                system_prompt = prepare_system_prompt_for_agentic_v1(self.user_manager.user_info,
-                                                                     self.previous_summary,
-                                                                     self.chat_history_manager.chat_history,
-                                                                     search_result_section)
+                    search_result_section = f"""## Search Limit Reached.\n
+                    You have requested a search multiple times for the term: {search_term['search_term']}
+                    based on the most recent user's question, but no results were found.
+                    Please conclude the conversation with the user based on the available information."""
+                elif isinstance(function_result, bool):
+                    search_result_section = f"""## User Info Updated\n
+                    Your request to update the user's information was successful. Please continue the conversation with the user.
+                    """
+                system_prompt = prepare_system_prompt_for_agentic_chatbot_v1(self.user_manager.user_info,
+                                                                             self.previous_summary,
+                                                                             self.chat_history_manager.chat_history,
+                                                                             search_result_section)
+                print("--------------------------------")
+                print(f"User info: {self.user_manager.user_info}")
+                print(f"Previous summary: {self.previous_summary}")
+                print(
+                    f"Chat history: {self.chat_history_manager.chat_history}")
+                print("--------------------------------")
+                print(f"Search result section: {search_result_section}")
                 print(f"System prompt: {system_prompt}")
                 response = self.client.chat.completions.create(
                     model=self.chat_model,
@@ -72,7 +87,6 @@ class Chatbot:
                     function_call="auto",
                     temperature=self.cfg.temperature
                 )
-                print(f"User message: {user_message}")
                 if response.choices[0].message.function_call:
                     function_call_count += 1  # Increment function call count
                     if function_call_count > self.cfg.max_function_calls:
@@ -95,7 +109,6 @@ class Chatbot:
                     print(f"Function result: {function_result}")
                 elif response.choices[0].message.content:
                     assistant_response = response.choices[0].message.content
-                    print(f"Assistant response: {assistant_response}")
                     self.chat_history_manager.add_to_history(
                         user_message, assistant_response, self.max_history_pairs
                     )
