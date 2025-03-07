@@ -1,5 +1,3 @@
-
-
 class ChatHistoryManager:
     def __init__(self, db_manager, user_id, session_id):
         self.db_manager = db_manager
@@ -8,9 +6,9 @@ class ChatHistoryManager:
         self.chat_history = []
 
     def add_to_history(self, user_message, assistant_response, max_history_pairs):
-        self.chat_history.append({"role": "user", "content": user_message})
+        self.chat_history.append({"user": user_message})
         self.chat_history.append(
-            {"role": "assistant", "content": assistant_response})
+            {"assistant": assistant_response})
 
         if len(self.chat_history) > max_history_pairs * 2:
             self.chat_history = self.chat_history[-max_history_pairs * 2:]

@@ -15,9 +15,9 @@ def create_user_info():
         last_name TEXT NOT NULL,
         occupation TEXT NOT NULL,
         location TEXT NOT NULL,
-        age INTEGER NOT NULL,
-        gender TEXT NOT NULL,
-        interests TEXT NOT NULL
+        age INTEGER,  -- Allow NULL values (so chatbot can fill later)
+        gender TEXT,  -- Allow NULL values
+        interests TEXT  -- Allow NULL values
     );
 
     CREATE TABLE IF NOT EXISTS chat_history (
@@ -40,10 +40,10 @@ def create_user_info():
     );
     """)
 
-    # Insert Sample User if Not Exists
+    # Insert Sample User if Not Exists (leaving age, gender, interests empty)
     cursor.execute("""
-    INSERT INTO user_info (name, last_name, occupation, country)
-    SELECT 'farzad', 'roozitalab', 'senior ML engineer', 'Canada'
+    INSERT INTO user_info (name, last_name, occupation, location, age, gender, interests)
+    SELECT 'Farzad', 'Roozitalab', 'Senior ML Engineer', 'Canada', NULL, NULL, NULL
     WHERE NOT EXISTS (SELECT 1 FROM user_info);
     """)
 

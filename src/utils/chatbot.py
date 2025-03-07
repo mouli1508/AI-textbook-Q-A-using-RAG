@@ -6,22 +6,20 @@ from utils.database_manager import DatabaseManager
 from utils.user_manager import UserManager
 from utils.chat_history_manager import ChatHistoryManager
 from utils.prepare_prompt import prepare_system_prompt
-# Load environment variables
+from utils.config import Config
+
 load_dotenv()
 
 
 class Chatbot:
-    def __init__(self,
-                 chat_model: str = "gpt-4o-mini",
-                 summary_model: str = "gpt-3.5-turbo",
-                 max_history_pairs: int = 2):
-
+    def __init__(self):
+        self.cfg = Config()
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        self.chat_model = chat_model
-        self.summary_model = summary_model
-        self.max_history_pairs = max_history_pairs
+        self.chat_model = self.cfg.chat_model
+        self.summary_model = self.cfg.summary_model
+        self.max_history_pairs = self.cfg.max_history_pairs
 
-        self.db_manager = DatabaseManager()
+        self.db_manager = DatabaseManager(self.cfg.db_path)
         self.user_manager = UserManager(self.db_manager)
         self.session_id = str(uuid.uuid4())
 

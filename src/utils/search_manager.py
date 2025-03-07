@@ -1,11 +1,12 @@
 
 
 class SearchManager:
-    def __init__(self, db_manager, utils, client, summarier_model):
+    def __init__(self, db_manager, utils, client, summary_model: str, max_characters: int = 1000):
         self.db_manager = db_manager
         self.utils = utils
         self.client = client
-        self.summarier_model = summarier_model
+        self.summary_model = summary_model
+        self.max_characters = max_characters
 
     def search_chat_history(self, search_term: str) -> list:
         """
@@ -32,7 +33,7 @@ class SearchManager:
 
         num_characters = self.utils.count_number_of_characters(str(results))
         print(f"Number of characters in search results: {num_characters}")
-        if num_characters > 1000:
+        if num_characters > self.max_characters:
             results = self.summarize_search_result(str(formatted_results))
             return results
         return formatted_results
@@ -40,9 +41,12 @@ class SearchManager:
     def summarize_search_result(self, search_result: str) -> str:
 
         response = self.client.chat.completions.create(
-            model=self.summarier_model,
-            messages=[{"role": "system", "content": "Summarize the following conversation within 1000 characters"},
+            model=self.summary_model,
+            messages=[{"role": "system", "content": f"Summarize the following conversation within {self.max_characters} characters"},
                       {"role": "user", "content": search_result}]
         )
         response = response.choices[0].message.content
         return response
+
+    def search_vector_db(self, search_term: str) -> list:
+        pass

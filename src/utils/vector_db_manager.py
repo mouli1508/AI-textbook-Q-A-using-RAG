@@ -1,22 +1,34 @@
 from pyprojroot import here
 import os
+import chromadb
+import uuid
+from chromadb.utils import embedding_functions
 
 
 class VectorDBManager:
     def __init__(self,
                  db_path: str,
-                 chunk_size: int,
-                 chunk_overlap: int,
                  embedding_model: str,
                  vectordb_dir: str,
                  collection_name: str,
                  ):
         self.db_path = db_path
-        self.chunk_size = chunk_size
-        self.chunk_overlap = chunk_overlap
         self.embedding_model = embedding_model
-        self.vectordb_dir = vectordb_dir
-        self.collection_name = collection_name
+        self.vectordb_dir = here("data/vectordb")
+        self.collection_name = "chat_history"
+        self.embedding_function = embedding_functions.OpenAIEmbeddingFunction(
+            api_key=os.getenv("OPENAI_API_KEY"),
+            model_name=embedding_model
+        )
+        self.db_client = chromadb.PersistentClient(path=str(self.vectordb_dir))
+        self.collection = self.db_client.get_or_create_collection(
+            name=self.collection_name,
+            embedding_function=self.embedding_function,
+            metadata={"hnsw:space": "cosine"}
+        )
 
-    def update_vector_db(self, messages):
-        pass
+    def update_vector_db(self, msg_pair: dict):
+        return self.collection.add(
+            ids=str(uuid.uuid4()),
+            documents=[str(msg_pair)]
+        )

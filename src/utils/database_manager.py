@@ -1,9 +1,8 @@
 import sqlite3
-from pyprojroot import here
 
 
 class DatabaseManager:
-    def __init__(self, db_path=here("data/chatbot.db")):
+    def __init__(self, db_path: str):
         self.db_path = db_path
 
     def execute_query(self, query: str, params: tuple = (), fetch_one: bool = False, fetch_all: bool = False) -> list:

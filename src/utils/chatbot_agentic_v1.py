@@ -8,9 +8,7 @@ from utils.chat_history_manager import ChatHistoryManager
 from utils.search_manager import SearchManager
 from utils.prepare_prompt import prepare_system_prompt_for_agentic_v1
 from utils.utils import Utils
-from pydantic import create_model
-import inspect
-from inspect import Parameter
+from utils.config import Config
 from traceback import format_exc
 import json
 
@@ -18,45 +16,27 @@ load_dotenv()
 
 
 class Chatbot:
-    def __init__(self,
-                 chat_model: str = "gpt-4o-mini",
-                 summary_model: str = "gpt-3.5-turbo",
-                 max_history_pairs: int = 2,
-                 temperature: float = 0):
+    def __init__(self):
 
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        self.chat_model = chat_model
-        self.summary_model = summary_model
-        self.temperature = temperature
-        self.max_history_pairs = max_history_pairs
+        self.cfg = Config()
+        self.chat_model = self.cfg.chat_model
+        self.summary_model = self.cfg.summary_model
+        self.temperature = self.cfg.temperature
+        self.max_history_pairs = self.cfg.max_history_pairs
 
         self.session_id = str(uuid.uuid4())
         self.utils = Utils()
-        self.db_manager = DatabaseManager()
+        self.db_manager = DatabaseManager(self.cfg.db_path)
         self.user_manager = UserManager(self.db_manager)
         self.chat_history_manager = ChatHistoryManager(
             self.db_manager, self.user_manager.user_id, self.session_id)
         self.previous_summary = self.chat_history_manager.get_latest_summary()
 
         self.search_manager = SearchManager(
-            self.db_manager, self.utils, self.client, self.summary_model)
-        self.agent_functions = [self.jsonschema(self.chat_history_manager.add_user_info_to_database),
-                                self.jsonschema(self.search_manager.search_chat_history)]
-
-    def jsonschema(self, f):
-        """
-        Generate a JSON schema for the input parameters of the given function.
-
-        Parameters:
-            f (FunctionType): The function for which to generate the JSON schema.
-
-        Returns:
-            Dict: A dictionary containing the function name, description, and parameters schema.
-        """
-        kw = {n: (o.annotation, ... if o.default == Parameter.empty else o.default)
-              for n, o in inspect.signature(f).parameters.items()}
-        s = create_model(f'Input for `{f.__name__}`', **kw).schema()
-        return dict(name=f.__name__, description=f.__doc__, parameters=s)
+            self.db_manager, self.utils, self.client, self.summary_model, self.cfg.max_characters)
+        self.agent_functions = [self.utils.jsonschema(self.chat_history_manager.add_user_info_to_database),
+                                self.utils.jsonschema(self.search_manager.search_chat_history)]
 
     def execute_function_call(self, function_name: str, function_args: dict):
         if function_name == "search_chat_history":
@@ -70,13 +50,15 @@ class Chatbot:
         search_result_section = None
         chat_state = "thinking"
         function_call_count = 0  # Track function calls
-        max_function_calls = 3
         while chat_state != "finished":
             try:
                 if function_result:
                     search_result_section = f"""## If you see this section, it means you have just requested a search based on the most recent user's question.
                     The search term that you requested was {search_term["search_term"]}. Here is the result of the search for that word on chat history database:\n {function_result}"""
 
+                elif function_call_count >= self.cfg.max_function_calls and function_result == []:
+                    search_result_section = f"""## You have requested a search multiple times for the term: {search_term["search_term"]}, based on the most recent user's question. However, no results were found. 
+                    Please conclude the conversation with the user based on what you have."""
                 system_prompt = prepare_system_prompt_for_agentic_v1(self.user_manager.user_info,
                                                                      self.previous_summary,
                                                                      self.chat_history_manager.chat_history,
@@ -88,11 +70,12 @@ class Chatbot:
                               {"role": "user", "content": user_message}],
                     functions=self.agent_functions,
                     function_call="auto",
-                    temperature=0
+                    temperature=self.cfg.temperature
                 )
+                print(f"User message: {user_message}")
                 if response.choices[0].message.function_call:
                     function_call_count += 1  # Increment function call count
-                    if function_call_count > max_function_calls:
+                    if function_call_count > self.cfg.max_function_calls:
                         chat_state = "finished"
                         continue  # Force response generation
 
@@ -109,15 +92,10 @@ class Chatbot:
                     function_result = self.execute_function_call(response.choices[0].message.function_call.name,
                                                                  json.loads(
                                                                      (response.choices[0].message.function_call.arguments)))
-
-                elif function_call_count >= max_function_calls and response.choices[0].message.content == None:
-                    search_result_section = f"""## If you see this section, it means you have requested the search based on the most recent user's question multiple times.
-                    The results were provided to you after each search but you didn't conclude the conversation. Here is the result of the last search for that word on chat history database:\n{function_result}
-                    \nConclude the conversation with the user based on what is provided to you."""
-                    chat_state = "finished"
-                    return assistant_response
+                    print(f"Function result: {function_result}")
                 elif response.choices[0].message.content:
                     assistant_response = response.choices[0].message.content
+                    print(f"Assistant response: {assistant_response}")
                     self.chat_history_manager.add_to_history(
                         user_message, assistant_response, self.max_history_pairs
                     )

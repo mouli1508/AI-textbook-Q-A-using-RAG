@@ -12,9 +12,6 @@ def prepare_system_prompt(user_info, chat_summary, chat_history):
     Here is the previous conversation between you and the user:
 
     {chat_history}
-
-    Here is the user's new message:
-
     """
 
     return prompt.format(
@@ -54,9 +51,6 @@ def prepare_system_prompt_for_agentic_v1(user_info: str, chat_summary: str, chat
     Remember the function expectes a dictionary as input, so prepare the right key-value pairs.
 
     {search_result_section}
-
-    ## Here is the user's new message:
-
     """
 
     return prompt.format(

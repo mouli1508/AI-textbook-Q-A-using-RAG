@@ -1,5 +1,5 @@
 import time
-from utils.chatbot_agentic_v_1 import Chatbot
+from utils.chatbot_agentic_v1 import Chatbot
 
 if __name__ == "__main__":
     chatbot = Chatbot()
