@@ -54,3 +54,40 @@ class UserManager:
         query = "SELECT id FROM user_info LIMIT 1;"
         user = self.db_manager.execute_query(query, fetch_one=True)
         return user[0] if user else None
+
+    def add_user_info_to_database(self, **kwargs: dict) -> str:
+        """
+        Updates the user information in the database if valid keys are provided.
+
+        Args:
+            user_info (dict): Dictionary containing user attributes to update.
+
+        Returns:
+            bool: True if the update was successful, False if invalid keys are provided.
+        """
+        try:
+            valid_keys = {"name", "last_name", "age", "gender",
+                          "location", "occupation", "interests"}
+
+            for key in kwargs.keys():
+                if key not in valid_keys:
+                    return "Function call failed.", "Please provide a valid key from the following list: name, last_name, age, gender, location, occupation, interests"
+
+            # Convert interests list to comma-separated string if provided
+            if "interests" in kwargs and isinstance(kwargs["interests"], list):
+                kwargs["interests"] = ", ".join(kwargs["interests"])
+
+            # Prepare the SET clause for updating only provided fields
+            set_clause = ", ".join([f"{key} = ?" for key in kwargs.keys()])
+            params = tuple(kwargs.values())
+
+            query = f"""
+            UPDATE user_info
+            SET {set_clause}
+            WHERE id = (SELECT id FROM user_info LIMIT 1);
+            """
+
+            self.db_manager.execute_query(query, params)
+            return "Function call successful.", "User information updated."
+        except Exception as e:
+            return "Function call failed.", f"Error: {e}"

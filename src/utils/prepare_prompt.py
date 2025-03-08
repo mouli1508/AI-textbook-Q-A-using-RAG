@@ -24,7 +24,9 @@ def prepare_system_prompt(user_info, chat_summary, chat_history):
     )
 
 
-def prepare_system_prompt_for_agentic_chatbot_v1(user_info: str, chat_summary: str, chat_history: str, search_result_section: str) -> str:
+def prepare_system_prompt_for_agentic_chatbot_v1(user_info: str, chat_summary: str, chat_history: str, function_call_result_section: str) -> str:
+    if not function_call_result_section:
+        function_call_result_section = ""
 
     prompt = """## You are a professional assistant of the following user.
 
@@ -53,15 +55,18 @@ def prepare_system_prompt_for_agentic_chatbot_v1(user_info: str, chat_summary: s
     - location: str
     - occupation: str
     - interests: list[str]
-    
-    Important: The add_user_info_to_database function expects a dictionary as input. Ensure you provide the correct key-value pairs when calling it.
 
-    {search_result_section}
+    ## IMPORTANT: You are the only agent available to the user. You are the only agent talking to the user, so you are responsible for both the conversation and calling functions.
+    - If you call a function, the result will appear below.
+    - If the result confirms that the function was successful, or the maximum limit of function calls is reached, don't call it again.
+    - You can also check the chat history to see if you already called the function.
+    
+    {function_call_result_section}
     """
 
     return prompt.format(
         user_info=user_info,
         chat_summary=chat_summary,
         chat_history=chat_history,
-        search_result_section=search_result_section
+        function_call_result_section=function_call_result_section
     )

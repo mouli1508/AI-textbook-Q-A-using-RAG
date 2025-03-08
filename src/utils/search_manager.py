@@ -18,25 +18,32 @@ class SearchManager:
         Returns:
             list: List of tuples containing matching question, answer, and timestamp.
         """
-        search_term = search_term.lower()
-        query = """
-        SELECT question, answer, timestamp FROM chat_history
-        WHERE LOWER(question) LIKE ? OR LOWER(answer) LIKE ?
-        ORDER BY timestamp ASC
-        LIMIT 3;
-        """
+        try:
+            search_term = search_term.lower()
+            query = """
+            SELECT question, answer, timestamp FROM chat_history
+            WHERE LOWER(question) LIKE ? OR LOWER(answer) LIKE ?
+            ORDER BY timestamp ASC
+            LIMIT 3;
+            """
 
-        results = self.db_manager.execute_query(
-            query, (f"%{search_term}%", f"%{search_term}%"), fetch_all=True)
-        # Ensure the results maintain the order of question, then answer
-        formatted_results = [(q, a, t) for q, a, t in results]
+            results = self.db_manager.execute_query(
+                query, (f"%{search_term}%", f"%{search_term}%"), fetch_all=True)
+            # Ensure the results maintain the order of question, then answer
+            formatted_results = [(q, a, t) for q, a, t in results]
+            if formatted_results == []:
+                return "Function call successful.", "No results found. Please try again with a single word."
 
-        num_characters = self.utils.count_number_of_characters(str(results))
-        print(f"Number of characters in search results: {num_characters}")
-        if num_characters > self.max_characters:
-            results = self.summarize_search_result(str(formatted_results))
-            return results
-        return formatted_results
+            num_characters = self.utils.count_number_of_characters(
+                str(results))
+            print(f"Number of characters in search results: {num_characters}")
+            if num_characters > self.max_characters:
+                results_summary = self.summarize_search_result(
+                    str(formatted_results))
+                return "Function call successful.", results_summary
+            return "Function call successful.", formatted_results
+        except Exception as e:
+            return "Function call failed.", f"Error: {e}"
 
     def summarize_search_result(self, search_result: str) -> str:
 
