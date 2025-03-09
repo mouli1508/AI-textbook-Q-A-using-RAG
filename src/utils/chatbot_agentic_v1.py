@@ -48,39 +48,27 @@ class Chatbot:
         function_call_result_section = ""
         function_call_state = None
         chat_state = "thinking"
-        function_call_count = 0  # Track function calls
+        function_call_count = 0
         self.chat_history = self.chat_history_manager.chat_history
         function_call_prompt = f"""## You called the following functions:\n"""
         while chat_state != "finished":
             try:
                 if function_call_state:
                     function_call_prompt += f"{function_call_count} {function_name}\n with the following arguments: {function_args}\n"
-                    function_call_prompt += "\n"
-                    function_call_prompt += f"- {function_call_state}\n"
-                    function_call_prompt += "\n"
-                    function_call_prompt += f"- {function_call_result}\n"
-
-                    function_call_result_section = function_call_prompt
+                    function_call_prompt += f"- State: {function_call_state}\n"
+                    # I won't show the result of the function call in the chat history since it will be shown in the function call section.
                     self.chat_history.append(
-                        (function_call_state, function_call_result_section))
+                        (function_call_state, function_call_prompt))
+                    function_call_result_section = function_call_prompt
+                    function_call_result_section += f"- Result: {function_call_result}\n"
 
                 elif function_call_count >= self.cfg.max_function_calls:
                     function_call_result_section = f"""  # Function Call Limit Reached.\n
-                    You have requested the function {function_name} multiple times.
-                    But the process was not successful. Please conclude the conversation with the user based on the available information."""
-                    self.chat_history.append(
-                        (function_call_state, function_call_result_section))
-
+                    Please conclude the conversation with the user based on the available information."""
                 system_prompt = prepare_system_prompt_for_agentic_chatbot_v1(self.user_manager.user_info,
                                                                              self.previous_summary,
                                                                              self.chat_history,
                                                                              function_call_result_section)
-                print("--------------------------------")
-                print(f"User info: {self.user_manager.user_info}")
-                print(f"Previous summary: {self.previous_summary}")
-                print(
-                    f"Chat history: {self.chat_history_manager.chat_history}")
-                print("--------------------------------")
                 print(f"System prompt: {system_prompt}")
                 response = self.client.chat.completions.create(
                     model=self.chat_model,
@@ -90,28 +78,16 @@ class Chatbot:
                     function_call="auto",
                     temperature=self.cfg.temperature
                 )
+
                 if response.choices[0].message.function_call:
-                    function_call_count += 1  # Increment function call count
-                    if function_call_count > self.cfg.max_function_calls:
-                        chat_state = "finished"
-                        continue  # Force response generation
+                    function_call_count += 1
                     function_name = response.choices[0].message.function_call.name
-                    self.chat_history.append(
-                        f"Agent requested a function call: {function_name}")
                     function_args = json.loads(
                         response.choices[0].message.function_call.arguments)
-                    print(
-                        f"Function call {function_call_count}: {function_name} with args {function_args}")
-                    if function_name == "search_chat_history":
-                        search_term = function_args
-                        print(f"Search term: {search_term}")
-                    print("function name:",
-                          response.choices[0].message.function_call.name)
-                    function_call_state, function_call_result = self.execute_function_call(response.choices[0].message.function_call.name,
-                                                                                           json.loads(
-                        (response.choices[0].message.function_call.arguments)))
-                    print(f"Function call state: {function_call_state}")
-                    print(f"Function call result: {function_call_result}")
+                    self.chat_history.append(
+                        f"Agent requested a function call: {function_name} with args {function_args}")
+                    function_call_state, function_call_result = self.execute_function_call(
+                        function_name, function_args)
 
                 elif response.choices[0].message.content:
                     assistant_response = response.choices[0].message.content

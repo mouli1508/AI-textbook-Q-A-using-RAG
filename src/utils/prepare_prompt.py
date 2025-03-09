@@ -56,7 +56,7 @@ def prepare_system_prompt_for_agentic_chatbot_v1(user_info: str, chat_summary: s
     - occupation: str
     - interests: list[str]
 
-    ## IMPORTANT: You are the only agent available to the user. You are the only agent talking to the user, so you are responsible for both the conversation and calling functions.
+    ## IMPORTANT: You are the only agent talking to the user, so you are responsible for both the conversation and calling functions.
     - If you call a function, the result will appear below.
     - If the result confirms that the function was successful, or the maximum limit of function calls is reached, don't call it again.
     - You can also check the chat history to see if you already called the function.
