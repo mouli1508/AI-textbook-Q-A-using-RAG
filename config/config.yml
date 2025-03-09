@@ -20,3 +20,4 @@ agent_config:
 vectordb_config:
   collection_name: "chat_history"
   embedding_model: "text-embedding-3-small" 
+  k: 3

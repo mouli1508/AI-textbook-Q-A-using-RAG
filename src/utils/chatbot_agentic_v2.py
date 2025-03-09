@@ -1,7 +1,9 @@
 import os
 import uuid
+import json
 from dotenv import load_dotenv
 from openai import OpenAI
+from traceback import format_exc
 from utils.database_manager import DatabaseManager
 from utils.user_manager import UserManager
 from utils.chat_history_manager import ChatHistoryManager
@@ -9,8 +11,7 @@ from utils.search_manager import SearchManager
 from utils.prepare_prompt import prepare_system_prompt_for_agentic_chatbot_v1
 from utils.utils import Utils
 from utils.config import Config
-from traceback import format_exc
-import json
+from utils.vector_db_manager import VectorDBManager
 
 load_dotenv()
 
@@ -32,6 +33,8 @@ class Chatbot:
         self.chat_history_manager = ChatHistoryManager(
             self.db_manager, self.user_manager.user_id, self.session_id)
         self.previous_summary = self.chat_history_manager.get_latest_summary()
+
+        self.vector_db_manager = VectorDBManager(self.cfg)
 
         self.search_manager = SearchManager(
             self.db_manager, self.utils, self.client, self.summary_model, self.cfg.max_characters)
@@ -98,6 +101,8 @@ class Chatbot:
                         self.max_history_pairs, self.client, self.summary_model
                     )
                     chat_state = "finished"
+                    self.vector_db_manager.update_vector_db(
+                        str(user_message, assistant_response))
                     return assistant_response
 
             except Exception as e:

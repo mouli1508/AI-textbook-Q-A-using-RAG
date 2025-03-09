@@ -1,7 +1,9 @@
 import os
 import uuid
+import json
 from dotenv import load_dotenv
 from openai import OpenAI
+from traceback import format_exc
 from utils.database_manager import DatabaseManager
 from utils.user_manager import UserManager
 from utils.chat_history_manager import ChatHistoryManager
@@ -9,8 +11,6 @@ from utils.search_manager import SearchManager
 from utils.prepare_prompt import prepare_system_prompt_for_agentic_chatbot_v1
 from utils.utils import Utils
 from utils.config import Config
-from traceback import format_exc
-import json
 
 load_dotenv()
 

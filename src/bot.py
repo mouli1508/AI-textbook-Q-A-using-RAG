@@ -1,8 +1,11 @@
 import time
 from utils.chatbot import Chatbot
+from utils.chatbot_agentic_v1 import Chatbot as Chatbot_v1
+from utils.chatbot_agentic_v2 import Chatbot as Chatbot_v2
+
 
 if __name__ == "__main__":
-    chatbot = Chatbot()
+    chatbot = Chatbot_v2()
     print("Chatbot initialized. Type 'exit' to end the conversation.")
 
     while True:
