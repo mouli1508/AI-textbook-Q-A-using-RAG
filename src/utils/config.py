@@ -12,6 +12,7 @@ class Config:
         # llm_config
         self.chat_model = config["llm_config"]["chat_model"]
         self.summary_model = config["llm_config"]["summary_model"]
+        self.rag_model = config["llm_config"]["rag_model"]
         self.temperature = config["llm_config"]["temperature"]
         # chat_history_config
         self.max_history_pairs = config["chat_history_config"]["max_history_pairs"]

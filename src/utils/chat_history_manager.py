@@ -14,6 +14,7 @@ class ChatHistoryManager:
             self.chat_history = self.chat_history[-max_history_pairs * 2:]
 
         self.save_to_db(user_message, assistant_response)
+        print("Chat history saved to database.")
 
     def save_to_db(self, user_message, assistant_response):
         if not self.user_id:
@@ -43,7 +44,7 @@ class ChatHistoryManager:
         return summary[0] if summary else None
 
     def save_summary_to_db(self, summary_text):
-        print("Saving summary to database...")
+
         if not self.user_id or not summary_text:
             return
         query = """
@@ -52,6 +53,7 @@ class ChatHistoryManager:
         """
         self.db_manager.execute_query(
             query, (self.user_id, self.session_id, summary_text))
+        print("Summary saved to database.")
 
     def update_chat_summary(self, max_history_pairs, client, summary_model):
         chat_data = self.get_chat_history_for_summary()
