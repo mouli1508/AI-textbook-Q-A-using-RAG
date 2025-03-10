@@ -5,9 +5,6 @@ from inspect import Parameter
 
 
 class Utils:
-    def __init__(self):
-        pass
-
     def count_number_of_tokens(self, text):
         encoding = tiktoken.encoding_for_model("gpt-4o-mini")
         tokens = encoding.encode(text)

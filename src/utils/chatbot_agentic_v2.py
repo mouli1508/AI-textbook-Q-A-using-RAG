@@ -72,7 +72,7 @@ class Chatbot:
                                                                              self.previous_summary,
                                                                              self.chat_history,
                                                                              function_call_result_section)
-                print(f"System prompt: {system_prompt}")
+                # print(f"System prompt: {system_prompt}")
                 response = self.client.chat.completions.create(
                     model=self.chat_model,
                     messages=[{"role": "system", "content": system_prompt},
