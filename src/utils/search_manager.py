@@ -1,7 +1,20 @@
+from openai import OpenAI
+from utils.utils import Utils
+from utils.database_manager import DatabaseManager
 
 
 class SearchManager:
-    def __init__(self, db_manager, utils, client, summary_model: str, max_characters: int = 1000):
+    def __init__(self, db_manager: DatabaseManager, utils: Utils, client: OpenAI, summary_model: str, max_characters: int = 1000):
+        """
+        Initializes the SearchManager instance.
+
+        Args:
+            db_manager (DatabaseManager): The database manager instance.
+            utils (Utils): The utility class instance.
+            client (OpenAI): The OpenAI client instance.
+            summary_model (str): The summary model to use.
+            max_characters (int): The maximum number of characters to summarize.
+        """
         self.db_manager = db_manager
         self.utils = utils
         self.client = client
@@ -13,7 +26,7 @@ class SearchManager:
         Searches chat history for a term, performing a case-insensitive lookup.
 
         Args:
-            search_term (str): The keyword to search in the chat history.
+            search_term(str): The keyword to search in the chat history.
 
         Returns:
             list: List of tuples containing matching question, answer, and timestamp.
@@ -46,7 +59,15 @@ class SearchManager:
             return "Function call failed.", f"Error: {e}"
 
     def summarize_search_result(self, search_result: str) -> str:
+        """
+        Summarizes a search result if it exceeds the character limit.
 
+        Args:
+            search_result (str): The search result to summarize.
+
+        Returns:
+            str: A summarized version of the search result.
+        """
         response = self.client.chat.completions.create(
             model=self.summary_model,
             messages=[{"role": "system", "content": f"Summarize the following conversation within {self.max_characters} characters"},
@@ -54,6 +75,3 @@ class SearchManager:
         )
         response = response.choices[0].message.content
         return response
-
-    def search_vector_db(self, search_term: str) -> list:
-        pass

@@ -2,7 +2,17 @@ import sqlite3
 
 
 class DatabaseManager:
+    """
+    A manager for handling SQLite database connections and executing queries.
+    """
+
     def __init__(self, db_path: str):
+        """
+        Initializes the DatabaseManager instance.
+
+        Args:
+            db_path (str): Path to the SQLite database file.
+        """
         self.db_path = db_path
 
     def execute_query(self, query: str, params: tuple = (), fetch_one: bool = False, fetch_all: bool = False) -> list:
@@ -16,7 +26,10 @@ class DatabaseManager:
             fetch_all (bool, optional): Whether to fetch all rows. Defaults to False.
 
         Returns:
-            list: Query results if fetching is enabled; otherwise, None.
+            Optional[list[tuple[Any, ...]]]: 
+                - A single row (if `fetch_one` is True).
+                - All rows (if `fetch_all` is True).
+                - None if no data is fetched.
         """
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()

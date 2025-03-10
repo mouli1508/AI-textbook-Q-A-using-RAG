@@ -1,6 +1,6 @@
 
 
-def prepare_system_prompt(user_info, chat_summary, chat_history):
+def prepare_system_prompt(user_info: str, chat_summary: str, chat_history: str) -> str:
     user_info = ""
     chat_summary = ""
     chat_history = ""
@@ -121,7 +121,7 @@ def prepare_system_prompt_for_agentic_chatbot_v2(user_info: str, chat_summary: s
     )
 
 
-def prepare_system_prompt_for_rag_chatbot():
+def prepare_system_prompt_for_rag_chatbot() -> str:
     prompt = """You will receive a user query and the search results retrieved from a chat history vector database. The search results will include the most likely relevant responses to the query.
 
     Your task is to:

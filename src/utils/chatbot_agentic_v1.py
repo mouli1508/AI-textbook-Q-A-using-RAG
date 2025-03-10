@@ -16,8 +16,16 @@ load_dotenv()
 
 
 class Chatbot:
-    def __init__(self):
+    """
+    Chatbot class that handles conversational flow, manages user data, and executes function calls using OpenAI's API.
+    """
 
+    def __init__(self):
+        """
+        Initializes the Chatbot instance.
+
+        Sets up OpenAI client, configuration settings, session ID, and database managers.
+        """
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.cfg = Config()
         self.chat_model = self.cfg.chat_model
@@ -38,13 +46,32 @@ class Chatbot:
         self.agent_functions = [self.utils.jsonschema(self.user_manager.add_user_info_to_database),
                                 self.utils.jsonschema(self.search_manager.search_chat_history)]
 
-    def execute_function_call(self, function_name: str, function_args: dict):
+    def execute_function_call(self, function_name: str, function_args: dict) -> tuple[str, str]:
+        """
+        Executes the requested function based on the function name and arguments.
+
+        Args:
+            function_name (str): The name of the function to execute.
+            function_args (dict): The arguments required for the function.
+
+        Returns:
+            tuple[str, str]: A tuple containing the function state and result.
+        """
         if function_name == "search_chat_history":
             return self.search_manager.search_chat_history(**function_args)
         elif function_name == "add_user_info_to_database":
             return self.user_manager.add_user_info_to_database(**function_args)
 
-    def chat(self, user_message):
+    def chat(self, user_message: str) -> str:
+        """
+        Handles a conversation with the user, manages chat history, and executes function calls if needed.
+
+        Args:
+            user_message (str): The message from the user.
+
+        Returns:
+            str: The chatbot's response or an error message.
+        """
         function_call_result_section = ""
         function_call_state = None
         chat_state = "thinking"

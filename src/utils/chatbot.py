@@ -12,7 +12,16 @@ load_dotenv()
 
 
 class Chatbot:
+    """
+    Chatbot class that handles conversational flow.
+    """
+
     def __init__(self):
+        """
+        Initializes the Chatbot instance.
+
+        Sets up OpenAI client, configuration settings, session ID, and database managers.
+        """
         self.cfg = Config()
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.chat_model = self.cfg.chat_model
@@ -27,7 +36,16 @@ class Chatbot:
             self.db_manager, self.user_manager.user_id, self.session_id)
         self.previous_summary = self.chat_history_manager.get_latest_summary()
 
-    def chat(self, user_message):
+    def chat(self, user_message: str) -> str:
+        """
+        Handles a conversation with the user and manages chat history.
+
+        Args:
+            user_message (str): The message from the user.
+
+        Returns:
+            str: The chatbot's response or an error message.
+        """
         system_prompt = prepare_system_prompt(self.user_manager.user_info,
                                               self.previous_summary,
                                               self.chat_history_manager.chat_history)

@@ -1,11 +1,10 @@
-from pyprojroot import here
 import os
 import chromadb
 import uuid
+from openai import OpenAI
 from chromadb.utils import embedding_functions
 from utils.config import Config
 from utils.prepare_system_prompt import prepare_system_prompt_for_rag_chatbot
-from openai import OpenAI
 
 
 class VectorDBManager:
