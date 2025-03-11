@@ -2,3 +2,17 @@ Improve search strategy:
 - Search based on the last few months and not the whole database
 
 Imprve the summary model:
+
+Improve data storage:
+- Have a shared database for the user that can be shared between multiple conversations
+- And have the typical chat session conversation
+
+
+More advanced user info:
+
+hobbies
+food section
+interests
+etc.
+
+Advanced database structure: Knowledge Graph
