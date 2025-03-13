@@ -3,9 +3,9 @@ import json
 import inspect
 from letta.schemas.llm_config import LLMConfig
 from letta.schemas.memory import ChatMemory
-from letta.schemas.memory import ChatMemory
 from letta.schemas.block import Block
 from letta import create_client
+from letta.schemas.embedding_config import EmbeddingConfig
 
 client = create_client()
 
@@ -29,8 +29,16 @@ class TaskMemory(ChatMemory):
 
     def __init__(self, human: str, persona: str, tasks: List[str]):
         super().__init__(human=human, persona=persona, limit=2000)
-        self.link_block(
-            name="tasks",
+        # self.link_block(
+        #     name="tasks",
+        #     block=Block(
+        #         limit=2000,
+        #         value=json.dumps(tasks),
+        #         name="tasks",
+        #         label="tasks"
+        #     )
+        # )
+        self.set_block(
             block=Block(
                 limit=2000,
                 value=json.dumps(tasks),
@@ -39,7 +47,7 @@ class TaskMemory(ChatMemory):
             )
         )
 
-    def task_queue_push(self: "Agent", task_description: str):
+    def task_queue_push(self, task_description: str):
         """
         Push to a task queue stored in core memory. 
 
@@ -56,7 +64,7 @@ class TaskMemory(ChatMemory):
         self.memory.update_block_value("tasks", json.dumps(tasks))
         return None
 
-    def task_queue_pop(self: "Agent"):
+    def task_queue_pop(self):
         """
         Get the next task from the task queue 
 
@@ -78,6 +86,7 @@ class TaskMemory(ChatMemory):
 task_agent_name = "task_agent"
 
 task_agent_state = client.create_agent(
+    embedding_config="text-embedding-ada-002",
     name=task_agent_name,
     system=open("task_queue_system_prompt.txt", "r").read(),
     memory=TaskMemory(

@@ -16,3 +16,13 @@ interests
 etc.
 
 Advanced database structure: Knowledge Graph
+
+to the memory design also add the scaling considerations.
+
+Also adding the ability to the LLM to change its own system role.
+
+Also add the ability to control the size of the inputs to never surpass 70% of the context length.
+
+Efficient design and execution is crucial. right now everything is in sequential format.
+
+
