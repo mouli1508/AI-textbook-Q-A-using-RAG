@@ -1,6 +1,7 @@
 from typing import Optional, List
 from openai import OpenAI
 from utils.database_manager import DatabaseManager
+from utils.utils import Utils
 
 
 class ChatHistoryManager:
@@ -8,7 +9,7 @@ class ChatHistoryManager:
     Manages chat history and summarization for a user session.
     """
 
-    def __init__(self, db_manager: DatabaseManager, user_id: str, session_id: str) -> None:
+    def __init__(self, db_manager: DatabaseManager, user_id: str, session_id: str, client: OpenAI, summary_model: str) -> None:
         """
         Initializes the ChatHistoryManager with database manager, user ID, and session ID.
 
@@ -17,6 +18,9 @@ class ChatHistoryManager:
             user_id (str): The ID of the user.
             session_id (str): The ID of the chat session.
         """
+        self.client = client
+        self.summary_model = summary_model
+        self.utils = Utils()
         self.db_manager = db_manager
         self.user_id = user_id
         self.session_id = session_id
@@ -42,6 +46,19 @@ class ChatHistoryManager:
         self.save_to_db(user_message, assistant_response)
         self.pairs_since_last_summary += 1
         print("Chat history saved to database.")
+        chat_history_token_count = self.utils.count_number_of_tokens(
+            str(self.chat_history))
+        if chat_history_token_count > 500:
+            print("*************************************************")
+            print("Summarizing the chat history ...")
+            print("\nCurrent chat history:\n", self.chat_history)
+            print("\nNumber of tokens:", chat_history_token_count)
+            self.summarize_chat_history(self.client, self.summary_model)
+            chat_history_token_count = self.utils.count_number_of_tokens(
+                str(self.chat_history))
+            print("\n\nNew chat history:\n", self.chat_history)
+            print("\nNumber of tokens:", chat_history_token_count)
+            print("*************************************************")
 
     def save_to_db(self, user_message: str, assistant_response: str) -> None:
         """
@@ -72,14 +89,15 @@ class ChatHistoryManager:
             List[tuple]: A list of tuples containing user questions and assistant answers.
         """
         query = """
-            SELECT question, answer FROM chat_history 
-            WHERE session_id = ? 
-            ORDER BY timestamp DESC 
+            SELECT question, answer FROM chat_history
+            WHERE session_id = ?
+            ORDER BY timestamp DESC
             LIMIT ?;
         """
         chat_data = self.db_manager.execute_query(
             query, (self.session_id, num_pairs * 2), fetch_all=True)
         # Reverse to maintain chronological order
+        print(chat_data)
         return list(reversed(chat_data))
 
     def get_latest_summary(self) -> Optional[str]:
@@ -90,7 +108,7 @@ class ChatHistoryManager:
             Optional[str]: The latest summary or None if no summary exists.
         """
         query = """
-            SELECT summary_text FROM summary 
+            SELECT summary_text FROM summary
             WHERE session_id = ? ORDER BY timestamp DESC LIMIT 1;
         """
         summary = self.db_manager.execute_query(
@@ -136,7 +154,7 @@ class ChatHistoryManager:
         if len(chat_data) <= max_history_pairs:
             return
 
-        summary_text = self.generate_summary(
+        summary_text = self.generate_summary_based_on_characers(
             client, summary_model, chat_data, previous_summary)
 
         if summary_text:
@@ -144,7 +162,7 @@ class ChatHistoryManager:
             self.pairs_since_last_summary = 0  # Reset the counter after a summary
             print("Chat history summary generated and saved to database.")
 
-    def generate_summary(
+    def generate_summary_based_on_characers(
         self,
         client: OpenAI,
         summary_model: str,
@@ -186,3 +204,51 @@ class ChatHistoryManager:
         except Exception as e:
             print(f"Error generating summary: {str(e)}")
             return None
+
+    def summarize_chat_history(self, client: OpenAI, summary_model: str):
+        """
+        Summarizes older parts of the chat history to reduce token count while maintaining context.
+        """
+        # Select older pairs to summarize (keep latest pairs untouched)
+        pairs_to_keep = 1
+        pairs_to_summarize = self.chat_history[:-pairs_to_keep * 2]
+
+        if len(pairs_to_summarize) == 0:
+            return
+
+        # Create a prompt for summarization
+        prompt = f"""
+        Summarize the following conversation while preserving key details and the conversation's tone:
+        {pairs_to_summarize}
+
+        Return the summarized conversation (in JSON format with 'user' and 'assistant' pairs):
+        """
+        # summary_prompt = f"""
+        # Summarize the following conversation while preserving key details and the conversation's tone.
+        # Return the summarized conversation (in JSON format with 'user' and 'assistant' pairs):
+        # """
+
+        # Use GPT model to generate a summary
+        response = client.chat.completions.create(
+            model=summary_model,
+            messages=[
+                # {"role": "system", "content": "You are a helpful assistant that summarizes conversations."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=300
+        )
+
+        summarized_pairs = response.choices[0].message.content
+
+        try:
+            # Ensure it's a valid list of dicts
+            summarized_pairs = eval(summarized_pairs)
+        except Exception as e:
+            print(f"Failed to parse summary: {e}")
+            return
+
+        # Keep recent pairs + summarized history
+        self.chat_history = summarized_pairs + \
+            self.chat_history[-pairs_to_keep * 2:]
+
+        print("Chat history summarized.")
