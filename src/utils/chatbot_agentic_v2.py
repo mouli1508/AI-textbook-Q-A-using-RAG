@@ -39,8 +39,7 @@ class Chatbot:
         self.db_manager = DatabaseManager(self.cfg.db_path)
         self.user_manager = UserManager(self.db_manager)
         self.chat_history_manager = ChatHistoryManager(
-            self.db_manager, self.user_manager.user_id, self.session_id)
-        self.previous_summary = self.chat_history_manager.get_latest_summary()
+            self.db_manager, self.user_manager.user_id, self.session_id, self.client, self.summary_model)
 
         self.vector_db_manager = VectorDBManager(self.cfg)
 
@@ -81,6 +80,7 @@ class Chatbot:
         function_call_count = 0
         self.chat_history = self.chat_history_manager.chat_history
         function_call_prompt = f"""## You called the following functions:\n"""
+        self.previous_summary = self.chat_history_manager.get_latest_summary()
         while chat_state != "finished":
             try:
                 if function_call_state:
@@ -99,7 +99,8 @@ class Chatbot:
                                                                              self.previous_summary,
                                                                              self.chat_history,
                                                                              function_call_result_section)
-                # print(f"System prompt: {system_prompt}")
+                print("\n\n==========================================")
+                print(f"System prompt: {system_prompt}")
                 response = self.client.chat.completions.create(
                     model=self.chat_model,
                     messages=[{"role": "system", "content": system_prompt},

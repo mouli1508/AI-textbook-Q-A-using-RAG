@@ -33,7 +33,7 @@ class Chatbot:
         self.session_id = str(uuid.uuid4())
 
         self.chat_history_manager = ChatHistoryManager(
-            self.db_manager, self.user_manager.user_id, self.session_id)
+            self.db_manager, self.user_manager.user_id, self.session_id, self.client, self.summary_model)
         self.previous_summary = self.chat_history_manager.get_latest_summary()
 
     def chat(self, user_message: str) -> str:
