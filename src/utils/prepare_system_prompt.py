@@ -80,14 +80,6 @@ def prepare_system_prompt_for_agentic_chatbot_v2(user_info: str, chat_summary: s
 
     {user_info}
 
-    ## Here is a summary of the previous conversation history:
-
-    {chat_summary}
-
-    ## Here is the previous conversation between you and the user:
-
-    {chat_history}
-
     ## You have access to two functions: search_vector_db and add_user_info_to_database.
 
     - If you need more information about the user or details from previous conversations to answer the user's question, use the search_vector_db function.
@@ -111,6 +103,16 @@ def prepare_system_prompt_for_agentic_chatbot_v2(user_info: str, chat_summary: s
     - You can also check the chat history to see if you already called the function.
     
     {function_call_result_section}
+
+    ## Here is a summary of the previous conversation history:
+
+    {chat_summary}
+
+    ## Here is the previous conversation between you and the user:
+
+    {chat_history}
+
+    ## Here is the user's new question
     """
 
     return prompt.format(
