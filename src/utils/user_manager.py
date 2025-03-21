@@ -1,6 +1,6 @@
 import math
 from typing import Optional, Dict, Any
-from utils.database_manager import DatabaseManager
+from utils.sql_manager import SQLManager
 
 
 class UserManager:
@@ -9,14 +9,14 @@ class UserManager:
     from the database.
     """
 
-    def __init__(self, db_manager: DatabaseManager):
+    def __init__(self, sql_manager: SQLManager):
         """
         Initializes the UserManager with a database manager.
 
         Args:
-            db_manager (DatabaseManager): The database manager instance to execute queries.
+            sql_manager (SQLManager): The database manager instance to execute queries.
         """
-        self.db_manager = db_manager
+        self.sql_manager = sql_manager
         self.user_info = self.get_user_info()
         self.user_id = self.get_user_id()
 
@@ -29,7 +29,7 @@ class UserManager:
             or None if no user is found.
         """
         query = "SELECT * FROM user_info LIMIT 1;"
-        user = self.db_manager.execute_query(query, fetch_one=True)
+        user = self.sql_manager.execute_query(query, fetch_one=True)
         if user:
             user_info = {
                 "id": user[0],
@@ -52,7 +52,7 @@ class UserManager:
             Optional[int]: The user ID if found, otherwise None.
         """
         query = "SELECT id FROM user_info LIMIT 1;"
-        user = self.db_manager.execute_query(query, fetch_one=True)
+        user = self.sql_manager.execute_query(query, fetch_one=True)
         return user[0] if user else None
 
     def add_user_info_to_database(self, **kwargs: dict) -> str:
@@ -87,7 +87,7 @@ class UserManager:
             WHERE id = (SELECT id FROM user_info LIMIT 1);
             """
 
-            self.db_manager.execute_query(query, params)
+            self.sql_manager.execute_query(query, params)
             return "Function call successful.", "User information updated."
         except Exception as e:
             return "Function call failed.", f"Error: {e}"

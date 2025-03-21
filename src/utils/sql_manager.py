@@ -1,14 +1,14 @@
 import sqlite3
 
 
-class DatabaseManager:
+class SQLManager:
     """
     A manager for handling SQLite database connections and executing queries.
     """
 
     def __init__(self, db_path: str):
         """
-        Initializes the DatabaseManager instance.
+        Initializes the SQLManager instance.
 
         Args:
             db_path (str): Path to the SQLite database file.

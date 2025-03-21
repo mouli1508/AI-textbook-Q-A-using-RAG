@@ -1,6 +1,6 @@
 from typing import Optional, List
 from openai import OpenAI
-from utils.database_manager import DatabaseManager
+from utils.sql_manager import SQLManager
 from utils.utils import Utils
 
 
@@ -9,19 +9,19 @@ class ChatHistoryManager:
     Manages chat history and summarization for a user session.
     """
 
-    def __init__(self, db_manager: DatabaseManager, user_id: str, session_id: str, client: OpenAI, summary_model: str) -> None:
+    def __init__(self, sql_manager: SQLManager, user_id: str, session_id: str, client: OpenAI, summary_model: str) -> None:
         """
         Initializes the ChatHistoryManager with database manager, user ID, and session ID.
 
         Args:
-            db_manager (DatabaseManager): An instance of the database manager for executing queries.
+            sql_manager (SQLManager): An instance of the sql manager for executing queries.
             user_id (str): The ID of the user.
             session_id (str): The ID of the chat session.
         """
         self.client = client
         self.summary_model = summary_model
         self.utils = Utils()
-        self.db_manager = db_manager
+        self.sql_manager = sql_manager
         self.user_id = user_id
         self.session_id = session_id
         self.chat_history = []
@@ -75,7 +75,7 @@ class ChatHistoryManager:
             INSERT INTO chat_history (user_id, question, answer, session_id)
             VALUES (?, ?, ?, ?);
         """
-        self.db_manager.execute_query(
+        self.sql_manager.execute_query(
             query, (self.user_id, user_message, assistant_response, self.session_id))
 
     def get_latest_chat_pairs(self, num_pairs: int) -> List[tuple]:
@@ -94,7 +94,7 @@ class ChatHistoryManager:
             ORDER BY timestamp DESC
             LIMIT ?;
         """
-        chat_data = self.db_manager.execute_query(
+        chat_data = self.sql_manager.execute_query(
             query, (self.session_id, num_pairs * 2), fetch_all=True)
         # Reverse to maintain chronological order
         print(chat_data)
@@ -111,7 +111,7 @@ class ChatHistoryManager:
             SELECT summary_text FROM summary
             WHERE session_id = ? ORDER BY timestamp DESC LIMIT 1;
         """
-        summary = self.db_manager.execute_query(
+        summary = self.sql_manager.execute_query(
             query, (self.session_id,), fetch_one=True)
         return summary[0] if summary else None
 
@@ -128,7 +128,7 @@ class ChatHistoryManager:
             INSERT INTO summary (user_id, session_id, summary_text)
             VALUES (?, ?, ?);
         """
-        self.db_manager.execute_query(
+        self.sql_manager.execute_query(
             query, (self.user_id, self.session_id, summary_text))
         print("Summary saved to database.")
 

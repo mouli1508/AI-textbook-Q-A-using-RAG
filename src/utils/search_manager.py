@@ -1,21 +1,21 @@
 from openai import OpenAI
 from utils.utils import Utils
-from utils.database_manager import DatabaseManager
+from utils.sql_manager import SQLManager
 
 
 class SearchManager:
-    def __init__(self, db_manager: DatabaseManager, utils: Utils, client: OpenAI, summary_model: str, max_characters: int = 1000):
+    def __init__(self, sql_manager: SQLManager, utils: Utils, client: OpenAI, summary_model: str, max_characters: int = 1000):
         """
         Initializes the SearchManager instance.
 
         Args:
-            db_manager (DatabaseManager): The database manager instance.
+            sql_manager (SQLManager): The database manager instance.
             utils (Utils): The utility class instance.
             client (OpenAI): The OpenAI client instance.
             summary_model (str): The summary model to use.
             max_characters (int): The maximum number of characters to summarize.
         """
-        self.db_manager = db_manager
+        self.sql_manager = sql_manager
         self.utils = utils
         self.client = client
         self.summary_model = summary_model
@@ -40,7 +40,7 @@ class SearchManager:
             LIMIT 3;
             """
 
-            results = self.db_manager.execute_query(
+            results = self.sql_manager.execute_query(
                 query, (f"%{search_term}%", f"%{search_term}%"), fetch_all=True)
             # Ensure the results maintain the order of question, then answer
             formatted_results = [(q, a, t) for q, a, t in results]

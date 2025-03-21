@@ -2,7 +2,7 @@ import os
 import uuid
 from dotenv import load_dotenv
 from openai import OpenAI
-from utils.database_manager import DatabaseManager
+from utils.sql_manager import SQLManager
 from utils.user_manager import UserManager
 from utils.chat_history_manager import ChatHistoryManager
 from utils.prepare_system_prompt import prepare_system_prompt
@@ -28,12 +28,12 @@ class Chatbot:
         self.summary_model = self.cfg.summary_model
         self.max_history_pairs = self.cfg.max_history_pairs
 
-        self.db_manager = DatabaseManager(self.cfg.db_path)
-        self.user_manager = UserManager(self.db_manager)
+        self.sql_manager = SQLManager(self.cfg.db_path)
+        self.user_manager = UserManager(self.sql_manager)
         self.session_id = str(uuid.uuid4())
 
         self.chat_history_manager = ChatHistoryManager(
-            self.db_manager, self.user_manager.user_id, self.session_id, self.client, self.summary_model)
+            self.sql_manager, self.user_manager.user_id, self.session_id, self.client, self.summary_model)
         self.previous_summary = self.chat_history_manager.get_latest_summary()
 
     def chat(self, user_message: str) -> str:

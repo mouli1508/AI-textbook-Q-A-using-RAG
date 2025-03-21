@@ -4,7 +4,7 @@ import json
 from dotenv import load_dotenv
 from openai import OpenAI
 from traceback import format_exc
-from utils.database_manager import DatabaseManager
+from utils.sql_manager import SQLManager
 from utils.user_manager import UserManager
 from utils.chat_history_manager import ChatHistoryManager
 from utils.search_manager import SearchManager
@@ -36,15 +36,15 @@ class Chatbot:
 
         self.session_id = str(uuid.uuid4())
         self.utils = Utils()
-        self.db_manager = DatabaseManager(self.cfg.db_path)
-        self.user_manager = UserManager(self.db_manager)
+        self.sql_manager = SQLManager(self.cfg.db_path)
+        self.user_manager = UserManager(self.sql_manager)
         self.chat_history_manager = ChatHistoryManager(
-            self.db_manager, self.user_manager.user_id, self.session_id, self.client, self.summary_model)
+            self.sql_manager, self.user_manager.user_id, self.session_id, self.client, self.summary_model)
 
         self.vector_db_manager = VectorDBManager(self.cfg)
 
         self.search_manager = SearchManager(
-            self.db_manager, self.utils, self.client, self.summary_model, self.cfg.max_characters)
+            self.sql_manager, self.utils, self.client, self.summary_model, self.cfg.max_characters)
         self.agent_functions = [self.utils.jsonschema(self.user_manager.add_user_info_to_database),
                                 self.utils.jsonschema(self.vector_db_manager.search_vector_db)]
 
