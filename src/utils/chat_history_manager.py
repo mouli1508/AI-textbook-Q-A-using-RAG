@@ -18,9 +18,9 @@ class ChatHistoryManager:
             user_id (str): The ID of the user.
             session_id (str): The ID of the chat session.
         """
+        self.utils = Utils()
         self.client = client
         self.summary_model = summary_model
-        self.utils = Utils()
         self.sql_manager = sql_manager
         self.user_id = user_id
         self.session_id = session_id
@@ -53,7 +53,10 @@ class ChatHistoryManager:
             print("Summarizing the chat history ...")
             print("\nCurrent chat history:\n", self.chat_history)
             print("\nNumber of tokens:", chat_history_token_count)
-            self.summarize_chat_history(self.client, self.summary_model)
+
+            self.summarize_chat_history()
+
+            # Re-count tokens after summarization
             chat_history_token_count = self.utils.count_number_of_tokens(
                 str(self.chat_history))
             print("\n\nNew chat history:\n", self.chat_history)
@@ -205,7 +208,7 @@ class ChatHistoryManager:
             print(f"Error generating summary: {str(e)}")
             return None
 
-    def summarize_chat_history(self, client: OpenAI, summary_model: str):
+    def summarize_chat_history(self):
         """
         Summarizes older parts of the chat history to reduce token count while maintaining context.
         """
@@ -223,32 +226,37 @@ class ChatHistoryManager:
 
         Return the summarized conversation (in JSON format with 'user' and 'assistant' pairs):
         """
-        # summary_prompt = f"""
-        # Summarize the following conversation while preserving key details and the conversation's tone.
-        # Return the summarized conversation (in JSON format with 'user' and 'assistant' pairs):
-        # """
-
-        # Use GPT model to generate a summary
-        response = client.chat.completions.create(
-            model=summary_model,
-            messages=[
-                # {"role": "system", "content": "You are a helpful assistant that summarizes conversations."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=300
-        )
-
-        summarized_pairs = response.choices[0].message.content
-
         try:
-            # Ensure it's a valid list of dicts
-            summarized_pairs = eval(summarized_pairs)
+            print("Summary prompt:", prompt)
+            # Use GPT model to generate a summary
+            response = self.client.chat.completions.create(
+                model=self.summary_model,
+                messages=[
+                    # {"role": "system", "content": "You are a helpful assistant that summarizes conversations."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=300
+            )
+            import json
+            summarized_pairs = response.choices[0].message.content
+            summarized_pairs = json.loads(summarized_pairs)
+
+            # ✅ If output is a single dictionary, wrap it in a list
+            if isinstance(summarized_pairs, dict):
+                summarized_pairs = [summarized_pairs]
+
+            # ✅ Ensure the format is consistent
+            if isinstance(summarized_pairs, list) and all(
+                isinstance(
+                    pair, dict) and 'user' in pair and 'assistant' in pair
+                for pair in summarized_pairs
+            ):
+                # Keep latest pairs + summarized history
+                self.chat_history = summarized_pairs + \
+                    self.chat_history[-pairs_to_keep * 2:]
+                print("Chat history summarized.")
+            else:
+                raise ValueError("Invalid format received from LLM.")
+
         except Exception as e:
-            print(f"Failed to parse summary: {e}")
-            return
-
-        # Keep recent pairs + summarized history
-        self.chat_history = summarized_pairs + \
-            self.chat_history[-pairs_to_keep * 2:]
-
-        print("Chat history summarized.")
+            print(f"Failed to summarize chat history: {e}")
