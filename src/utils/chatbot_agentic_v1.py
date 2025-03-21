@@ -38,7 +38,7 @@ class Chatbot:
         self.sql_manager = SQLManager(self.cfg.db_path)
         self.user_manager = UserManager(self.sql_manager)
         self.chat_history_manager = ChatHistoryManager(
-            self.sql_manager, self.user_manager.user_id, self.session_id, self.client, self.summary_model)
+            self.sql_manager, self.user_manager.user_id, self.session_id, self.client, self.summary_model, self.cfg.max_tokens)
 
         self.search_manager = SearchManager(
             self.sql_manager, self.utils, self.client, self.summary_model, self.cfg.max_characters)
@@ -123,7 +123,7 @@ class Chatbot:
                         user_message, assistant_response, self.max_history_pairs
                     )
                     self.chat_history_manager.update_chat_summary(
-                        self.max_history_pairs, self.client, self.summary_model
+                        self.max_history_pairs
                     )
                     chat_state = "finished"
                     return assistant_response

@@ -9,18 +9,11 @@ class ChatHistoryManager:
     Manages chat history and summarization for a user session.
     """
 
-    def __init__(self, sql_manager: SQLManager, user_id: str, session_id: str, client: OpenAI, summary_model: str) -> None:
-        """
-        Initializes the ChatHistoryManager with database manager, user ID, and session ID.
-
-        Args:
-            sql_manager (SQLManager): An instance of the sql manager for executing queries.
-            user_id (str): The ID of the user.
-            session_id (str): The ID of the chat session.
-        """
+    def __init__(self, sql_manager: SQLManager, user_id: str, session_id: str, client: OpenAI, summary_model: str, max_tokens: int) -> None:
         self.utils = Utils()
         self.client = client
         self.summary_model = summary_model
+        self.max_tokens = max_tokens
         self.sql_manager = sql_manager
         self.user_id = user_id
         self.session_id = session_id
@@ -48,7 +41,7 @@ class ChatHistoryManager:
         print("Chat history saved to database.")
         chat_history_token_count = self.utils.count_number_of_tokens(
             str(self.chat_history))
-        if chat_history_token_count > 2000:
+        if chat_history_token_count > self.max_tokens:
             print("*************************************************")
             print("Summarizing the chat history ...")
             print("\nOld number of tokens:", chat_history_token_count)
@@ -132,7 +125,7 @@ class ChatHistoryManager:
             query, (self.user_id, self.session_id, summary_text))
         print("Summary saved to database.")
 
-    def update_chat_summary(self, max_history_pairs: int, client: OpenAI, summary_model: str) -> None:
+    def update_chat_summary(self, max_history_pairs: int) -> None:
         """
         Updates the chat summary when {max_history_pairs} new pairs have been added since the last summary.
 
@@ -154,7 +147,7 @@ class ChatHistoryManager:
             return
 
         summary_text = self.generate_summary_based_on_characers(
-            client, summary_model, chat_data, previous_summary)
+            self.client, self.summary_model, chat_data, previous_summary)
 
         if summary_text:
             self.save_summary_to_db(summary_text)

@@ -59,7 +59,7 @@ class Chatbot:
             self.chat_history_manager.add_to_history(
                 user_message, assistant_response, self.max_history_pairs)
             self.chat_history_manager.update_chat_summary(
-                self.max_history_pairs, self.client, self.summary_model)
+                self.max_history_pairs)
             return assistant_response
         except Exception as e:
             return f"Error: {str(e)}"
