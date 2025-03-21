@@ -48,19 +48,17 @@ class ChatHistoryManager:
         print("Chat history saved to database.")
         chat_history_token_count = self.utils.count_number_of_tokens(
             str(self.chat_history))
-        if chat_history_token_count > 500:
+        if chat_history_token_count > 2000:
             print("*************************************************")
             print("Summarizing the chat history ...")
-            print("\nCurrent chat history:\n", self.chat_history)
-            print("\nNumber of tokens:", chat_history_token_count)
+            print("\nOld number of tokens:", chat_history_token_count)
 
             self.summarize_chat_history()
 
             # Re-count tokens after summarization
             chat_history_token_count = self.utils.count_number_of_tokens(
                 str(self.chat_history))
-            print("\n\nNew chat history:\n", self.chat_history)
-            print("\nNumber of tokens:", chat_history_token_count)
+            print("\nNew number of tokens:", chat_history_token_count)
             print("*************************************************")
 
     def save_to_db(self, user_message: str, assistant_response: str) -> None:
@@ -100,7 +98,6 @@ class ChatHistoryManager:
         chat_data = self.sql_manager.execute_query(
             query, (self.session_id, num_pairs * 2), fetch_all=True)
         # Reverse to maintain chronological order
-        print(chat_data)
         return list(reversed(chat_data))
 
     def get_latest_summary(self) -> Optional[str]:
@@ -144,7 +141,6 @@ class ChatHistoryManager:
             client (OpenAI): The client object used for calling the AI model.
             summary_model (str): The model name to use for summarization.
         """
-        print(f"Pairs since last summary: {self.pairs_since_last_summary}")
         if self.pairs_since_last_summary < max_history_pairs:
             return None
         # Fetch the latest two pairs (if available)
@@ -227,7 +223,6 @@ class ChatHistoryManager:
         Return the summarized conversation (in JSON format with 'user' and 'assistant' pairs):
         """
         try:
-            print("Summary prompt:", prompt)
             # Use GPT model to generate a summary
             response = self.client.chat.completions.create(
                 model=self.summary_model,
