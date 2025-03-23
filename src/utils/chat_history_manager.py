@@ -42,7 +42,6 @@ class ChatHistoryManager:
         chat_history_token_count = self.utils.count_number_of_tokens(
             str(self.chat_history))
         if chat_history_token_count > self.max_tokens:
-            print("*************************************************")
             print("Summarizing the chat history ...")
             print("\nOld number of tokens:", chat_history_token_count)
 
@@ -52,7 +51,6 @@ class ChatHistoryManager:
             chat_history_token_count = self.utils.count_number_of_tokens(
                 str(self.chat_history))
             print("\nNew number of tokens:", chat_history_token_count)
-            print("*************************************************")
 
     def save_to_db(self, user_message: str, assistant_response: str) -> None:
         """
