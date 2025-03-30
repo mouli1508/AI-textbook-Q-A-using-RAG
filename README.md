@@ -1,6 +1,8 @@
 # 🧠 Agentic Long-Term Memory
 
-This project explores the concept of long-term memory in AI agents and demonstrates how to build agentic memory systems using various approaches and tools.
+This project explores the concept of long-term memory in AI agents and demonstrates how to build agentic memory systems using various approaches and tools. 
+
+Feel free to ⭐️ the repo if it helps you understand long-term memory for agents!
 
 ## 📚 What You'll Learn
 1. How to design a **custom agentic long-term memory**.
@@ -14,6 +16,7 @@ PDF available in the repo: `letta/MemGPT_Paper.pdf`
 
 ## ▶️ Watch the Demo  
 📺 **YouTube Video:** _Coming soon..._
+
 
 ## 💾 How to Run the Project
 
@@ -43,12 +46,28 @@ PDF available in the repo: `letta/MemGPT_Paper.pdf`
         python src/bot_ui.py
         ```
     
-# Project schemas:
-image 1
-image 2
-image 3
-image 4
+# Project Schemas:
+**LLM Default Behavior**
 
+![Schema 1](images/default_behavior.png)
+**Concept of Memory**
+
+![Schema 2](images/memory.png)
+**Basic Chatbot Schema**
+
+![Schema 3](images/basic_chatbot.png)
+**Agentic_Chatbot_v2 Schema**
+
+![Schema 4](images/chatbot_v2.png)
+**Agentic_Chatbot_v3 Schema**
+
+![Schema 5](images/chatbot_v3.png)
+**Longterm Memory with Graph DB and Vector DB using LangGraph**
+
+![Schema 6](images/langgraph_tutorial.png)
+**Longterm Memory (Semantic, Episodical, and Procedural) with LangGraph**
+
+![Schema 7](images/langgraph_course.png)
 
 🧩 Technologies Used
 - Python
@@ -93,9 +112,12 @@ data/
 ├── vectordb/
 └── chatbot.db
 
+images/
+
 ├── requirements.txt
 ```
+**`src` Folder Structure**
+![Schema 8](images/src_folder_structure.png)
 
 
-Feel free to ⭐️ the repo if it helps you understand long-term memory for agents!
 
