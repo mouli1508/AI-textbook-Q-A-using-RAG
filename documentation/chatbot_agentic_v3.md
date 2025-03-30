@@ -7,10 +7,10 @@ This third version of the `Chatbot` class builds on the previous agentic version
 ### 1. **Initialization (`__init__`)**
 - Similar setup with OpenAI, config, session, and database managers.
 - Adds a new component:
-  - `VectorDBManager`: Manages a vector database (e.g., FAISS, Chroma, Pinecone, etc.) used for embedding-based search and memory updates.
+  - `VectorDBManager`: Manages a vector database (Chroma) used for embedding-based search and memory updates.
 - Updates the list of agent-callable functions to include:
   - `add_user_info_to_database`
-  - `search_vector_db` (replaces or complements earlier `search_chat_history`)
+  - `search_vector_db` (replaces earlier `search_chat_history`)
 
 ---
 
@@ -42,8 +42,8 @@ This third version of the `Chatbot` class builds on the previous agentic version
 | **Chat Flow** | Simple Q&A | Agent loop with function calls | Agent loop with memory + vector updates |
 | **Function Calling** | ❌ None | ✅ Basic agent functions | ✅ Includes vector DB search |
 | **Tools** | None | `add_user_info_to_database`, `search_chat_history` | `add_user_info_to_database`, `search_vector_db` |
-| **Search Capability** | ❌ None | ✅ Semantic chat history search | ✅ Vector database search |
-| **Memory System** | Chat + summary | Chat + summary | Chat + summary + **long-term memory (vector DB)** |
+| **Search Capability** | ❌ None | ✅ Keyword/phrase-based search on SQL database (not semantic) | ✅ Semantic search using vector embeddings (stored in a vector database) |
+| **Memory System** | Chat history + summary | Chat history + summary + **SQL db search result** | Chat hirsoty + summary + **long-term memory (vector DB)** |
 | **System Prompt** | `prepare_system_prompt` | `prepare_system_prompt_for_agentic_chatbot_v1` | `...v2` with vector support context |
 | **Knowledge Retention** | Temporary, short-term | Contextually limited | **Semantically indexed for long-term reasoning** |
 

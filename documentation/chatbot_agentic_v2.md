@@ -8,7 +8,7 @@ This second `Chatbot` class is an **advanced agentic version** of the first one.
 - Similar base setup as before (OpenAI client, config, chat model, summary model, etc.).
 - **Adds extra components:**
   - `Utils`: Utility methods, including one to convert Python functions to OpenAI-compatible JSON schemas.
-  - `SearchManager`: Enables the chatbot to retrieve information from chat history using semantic search.
+  - `SearchManager`: Enables the chatbot to retrieve information from the SQL database using keyword/phrase-based search **(not semantic)**.
   - `agent_functions`: A list of available functions (with schema) the chatbot can call, such as:
     - `add_user_info_to_database`
     - `search_chat_history`
@@ -45,7 +45,7 @@ This is where most of the new functionality lives:
 | **Chat Flow** | One-step, request-response | Multi-step with tool use and looping |
 | **Function Calling** | ❌ Not supported | ✅ Supported (OpenAI function calling) |
 | **Tools/Abilities** | Responds based on prompt only | Can take actions (e.g., update DB, search) |
-| **Search Functionality** | ❌ Not available | ✅ Can search previous chats contextually |
+| **Search Functionality** | ❌ Not available | ✅ Can search previous chats using keyword/phrase search on the SQL DB|
 | **Utils Component** | ❌ Not used | ✅ Used to convert functions into schemas |
 | **Prompt Strategy** | Simple system prompt | Enhanced prompt with function call context |
 | **Error Feedback** | Basic exception handling | Detailed traceback included |
@@ -54,4 +54,4 @@ This is where most of the new functionality lives:
 ---
 
 ## 🧠 Summary
-This updated version of the chatbot is designed to act more like an **intelligent agent**, capable of calling backend functions, incorporating their results, and iterating on its behavior. It adds **dynamic behavior**, **better memory handling**, and **tool use**—making it suitable for more advanced, task-driven conversations.
+This updated version of the chatbot is designed to act more like an **intelligent agent**, capable of calling backend functions, incorporating their results, and iterating on its behavior. It adds **dynamic behavior**, **better memory handling**, and **tool use**.
