@@ -1,4 +1,4 @@
-# Agent prompt baseline 
+# Agent prompt baseline
 agent_system_prompt = """
 < Role >
 You are {full_name}'s executive assistant. You are a top-notch executive assistant who cares about {name} performing as well as possible.

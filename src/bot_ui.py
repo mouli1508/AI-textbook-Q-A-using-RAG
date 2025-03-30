@@ -6,9 +6,9 @@ from utils.chatbot_agentic_v2 import Chatbot as Chatbot_v2
 
 # Initialize chatbot instances
 chatbots = {
-    "Base Chatbot": Chatbot(),
-    "Agentic v1": Chatbot_v1(),
-    "Agentic v2": Chatbot_v2()
+    "Base-Chatbot": Chatbot(),
+    "Agentic-v1": Chatbot_v1(),
+    "Agentic-v2": Chatbot_v2(),
 }
 
 
@@ -50,8 +50,9 @@ with gr.Blocks() as demo:
                 text_submit_btn = gr.Button(value="Submit")
                 clear_button = gr.ClearButton([input_txt, chatbot])
                 selected_bot = gr.Dropdown(
-                    choices=["Base Chatbot", "Agentic v1", "Agentic v2"],
-                    value="Agentic v2",
+                    choices=["Base-Chatbot", "Agentic-v1",
+                             "Agentic-v2"],
+                    value="Base-Chatbot",
                     label="Select Chatbot Version"
                 )
 
