@@ -51,32 +51,49 @@ image 4
 
 
 🧩 Technologies Used
-Python
-
-LangChain
-
-LangGraph
-
-SQLite
-
-FAISS / Chroma (Vector DBs)
-
-Gradio (UI)
+- Python
+- openai
+- LangChain
+- LangGraph
+- SQLite
+- Chroma (Vector DBs)
+- Gradio (UI)
 
 📂 Project Structure (High-Level)
 ```bash
 src/
-├── bot.py                # Terminal-based chatbot
-├── bot_ui.py             # Gradio UI version
-├── prepare_sqldb.py      # Creates SQLite DB
-├── prepare_vectordb.py   # Creates Vector DB
-├── check_sqldb.py        # Checks SQLite DB contents
-├── check_vectordb.py     # Checks Vector DB contents
+├── bot.py                     # Terminal-based chatbot
+├── bot_ui.py                  # Gradio UI version
+├── prepare_sqldb.py           # Creates SQLite DB
+├── prepare_vectordb.py        # Creates Vector DB
+├── check_sqldb.py             # Checks SQLite DB contents
+├── check_vectordb.py          # Checks Vector DB contents
+└── utils/
+    ├── chat_history_manager.py
+    ├── chatbot_agentic_v1.py
+    ├── chatbot_agentic_v2.py
+    ├── chatbot.py
+    ├── config.py
+    ├── prepare_system_prompt.py
+    ├── search_manager.py
+    ├── sql_manager.py
+    ├── user_manager.py
+    ├── utils.py
+    └── vector_db_manager.py
+
 langgraph/
-├── online-course/        # Memory system from DeepLearning.ai course
-├── website-tutorial/     # Tutorial-based memory system
+├── online-course/             # Memory system from DeepLearning.ai course
+└── website-tutorial/          # Tutorial-based memory system
+
 letta/
-└── MemGPT_Paper.pdf      # Research paper reference
+├── chatbot_with_longterm_memory.py
+└── MemGPT_Paper.pdf           # Research paper reference
+
+data/
+├── vectordb/
+└── chatbot.db
+
+├── requirements.txt
 ```
 
 
