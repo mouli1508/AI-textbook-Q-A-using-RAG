@@ -8,10 +8,9 @@ from utils.sql_manager import SQLManager
 from utils.user_manager import UserManager
 from utils.chat_history_manager import ChatHistoryManager
 from utils.search_manager import SearchManager
-from utils.prepare_system_prompt import prepare_system_prompt_for_agentic_chatbot_v2
+from utils.prepare_system_prompt import prepare_system_prompt_for_agentic_chatbot_v1
 from utils.utils import Utils
 from utils.config import Config
-from utils.vector_db_manager import VectorDBManager
 
 load_dotenv()
 
@@ -41,12 +40,10 @@ class Chatbot:
         self.chat_history_manager = ChatHistoryManager(
             self.sql_manager, self.user_manager.user_id, self.session_id, self.client, self.summary_model, self.cfg.max_tokens)
 
-        self.vector_db_manager = VectorDBManager(self.cfg)
-
         self.search_manager = SearchManager(
             self.sql_manager, self.utils, self.client, self.summary_model, self.cfg.max_characters)
         self.agent_functions = [self.utils.jsonschema(self.user_manager.add_user_info_to_database),
-                                self.utils.jsonschema(self.vector_db_manager.search_vector_db)]
+                                self.utils.jsonschema(self.search_manager.search_chat_history)]
 
     def execute_function_call(self, function_name: str, function_args: dict) -> tuple[str, str]:
         """
@@ -59,8 +56,8 @@ class Chatbot:
         Returns:
             tuple[str, str]: A tuple containing the function state and result.
         """
-        if function_name == "search_vector_db":
-            return self.vector_db_manager.search_vector_db(**function_args)
+        if function_name == "search_chat_history":
+            return self.search_manager.search_chat_history(**function_args)
         elif function_name == "add_user_info_to_database":
             return self.user_manager.add_user_info_to_database(**function_args)
 
@@ -95,7 +92,7 @@ class Chatbot:
                 elif function_call_count >= self.cfg.max_function_calls:
                     function_call_result_section = f"""  # Function Call Limit Reached.\n
                     Please conclude the conversation with the user based on the available information."""
-                system_prompt = prepare_system_prompt_for_agentic_chatbot_v2(self.user_manager.user_info,
+                system_prompt = prepare_system_prompt_for_agentic_chatbot_v1(self.user_manager.user_info,
                                                                              self.previous_summary,
                                                                              self.chat_history,
                                                                              function_call_result_section)
@@ -126,11 +123,9 @@ class Chatbot:
                         user_message, assistant_response, self.max_history_pairs
                     )
                     self.chat_history_manager.update_chat_summary(
-                        self.max_history_pairs)
+                        self.max_history_pairs
+                    )
                     chat_state = "finished"
-                    msg_pair = f"user: {user_message}, assistant: {assistant_response}"
-                    self.vector_db_manager.update_vector_db(
-                        msg_pair)
                     return assistant_response
 
             except Exception as e:

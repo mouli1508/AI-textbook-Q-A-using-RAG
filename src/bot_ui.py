@@ -1,14 +1,14 @@
-import gradio as gr
 import time
-from utils.chatbot import Chatbot
-from utils.chatbot_agentic_v1 import Chatbot as Chatbot_v1
+import gradio as gr
+from utils.basic_chatbot_v1 import Chatbot
 from utils.chatbot_agentic_v2 import Chatbot as Chatbot_v2
+from utils.chatbot_agentic_v3 import Chatbot as Chatbot_v3
 
 # Initialize chatbot instances
 chatbots = {
-    "Base-Chatbot": Chatbot(),
-    "Agentic-v1": Chatbot_v1(),
-    "Agentic-v2": Chatbot_v2(),
+    "Basic-Chatbot": Chatbot(),
+    "Chatbot-Agentic-v2": Chatbot_v2(),
+    "Chatbot-Agentic-v3": Chatbot_v3(),
 }
 
 
@@ -50,9 +50,9 @@ with gr.Blocks() as demo:
                 text_submit_btn = gr.Button(value="Submit")
                 clear_button = gr.ClearButton([input_txt, chatbot])
                 selected_bot = gr.Dropdown(
-                    choices=["Base-Chatbot", "Agentic-v1",
-                             "Agentic-v2"],
-                    value="Base-Chatbot",
+                    choices=["Basic-Chatbot-v1", "Chatbot-Agentic-v2",
+                             "Chatbot-Agentic-v3"],
+                    value="Basic-Chatbot-v1",
                     label="Select Chatbot Version"
                 )
 
