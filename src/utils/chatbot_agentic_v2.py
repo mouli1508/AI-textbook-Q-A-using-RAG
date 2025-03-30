@@ -85,7 +85,7 @@ class Chatbot:
                     function_call_prompt += f"- State: {function_call_state}\n"
                     # I won't show the result of the function call in the chat history since it will be shown in the function call section.
                     self.chat_history.append(
-                        (function_call_state, function_call_prompt))
+                        (function_call_prompt, function_call_state))
                     function_call_result_section = function_call_prompt
                     function_call_result_section += f"- Result: {function_call_result}\n"
 
@@ -112,8 +112,8 @@ class Chatbot:
                     function_name = response.choices[0].message.function_call.name
                     function_args = json.loads(
                         response.choices[0].message.function_call.arguments)
-                    self.chat_history.append(
-                        f"Agent requested a function call: {function_name} with args {function_args}")
+                    # self.chat_history.append(
+                    #     f"Agent requested a function call: {function_name} with args {function_args}")
                     function_call_state, function_call_result = self.execute_function_call(
                         function_name, function_args)
 
