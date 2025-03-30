@@ -50,21 +50,27 @@ PDF available in the repo: `letta/MemGPT_Paper.pdf`
 **LLM Default Behavior**
 
 ![Schema 1](images/default_behavior.png)
+
 **Concept of Memory**
 
 ![Schema 2](images/memory.png)
+
 **Basic Chatbot Schema**
 
 ![Schema 3](images/basic_chatbot.png)
+
 **Agentic_Chatbot_v2 Schema**
 
 ![Schema 4](images/chatbot_v2.png)
+
 **Agentic_Chatbot_v3 Schema**
 
 ![Schema 5](images/chatbot_v3.png)
+
 **Longterm Memory with Graph DB and Vector DB using LangGraph**
 
 ![Schema 6](images/langgraph_tutorial.png)
+
 **Longterm Memory (Semantic, Episodical, and Procedural) with LangGraph**
 
 ![Schema 7](images/langgraph_course.png)
