@@ -1,3 +1,6 @@
+
+# Basic Chatbot
+
 This `Chatbot` class is designed to manage a full conversational experience with a user, integrating OpenAI's chat models with persistent user and chat history management. Here's a breakdown of what it does:
 
 ---
@@ -25,3 +28,7 @@ This `Chatbot` class is designed to manage a full conversational experience with
 - **Error Handling:** Returns a readable error message if anything goes wrong during the API call.
 
 ---
+
+**Basic Chatbot Schema**
+
+![Schema](../images/basic_chatbot.png)

@@ -1,3 +1,5 @@
+# Agentic_Chatbot_v2
+
 This second `Chatbot` class is an **advanced agentic version** of the first one. It not only handles chat but also **enables tool use** through **OpenAI function calling**, allowing the chatbot to take actions like updating user info or searching chat history dynamically. Let’s break down its functionalities and then highlight the key differences from the first version.
 
 ---
@@ -55,3 +57,9 @@ This is where most of the new functionality lives:
 
 ## 🧠 Summary
 This updated version of the chatbot is designed to act more like an **intelligent agent**, capable of calling backend functions, incorporating their results, and iterating on its behavior. It adds **dynamic behavior**, **better memory handling**, and **tool use**.
+
+---
+
+**Agentic_Chatbot_v2 Schema**
+
+![Schema 4](../images/chatbot_v2.png)

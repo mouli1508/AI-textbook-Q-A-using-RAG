@@ -1,3 +1,5 @@
+# Agentic_Chatbot_v3
+
 This third version of the `Chatbot` class builds on the previous agentic versions but introduces **vector database integration** to **store and retrieve embeddings of chat content**, making the chatbot more context-aware and memory-rich over time.
 
 ---
@@ -57,3 +59,9 @@ This third version transforms the chatbot into a **hybrid conversational agent**
 - **Long-term memory** via vector embeddings
 
 This enables the chatbot to not only perform actions but also **grow smarter over time**, remember past conversations in a meaningful way, and retrieve relevant information using **semantic similarity** rather than just string matches. It's a big step toward creating an intelligent assistant that learns and adapts.
+
+---
+
+**Agentic_Chatbot_v3 Schema**
+
+![Schema 5](../images/chatbot_v3.png)
