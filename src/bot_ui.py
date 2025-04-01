@@ -50,9 +50,9 @@ with gr.Blocks() as demo:
                 text_submit_btn = gr.Button(value="Submit")
                 clear_button = gr.ClearButton([input_txt, chatbot])
                 selected_bot = gr.Dropdown(
-                    choices=["Basic-Chatbot-v1", "Chatbot-Agentic-v2",
+                    choices=["Basic-Chatbot", "Chatbot-Agentic-v2",
                              "Chatbot-Agentic-v3"],
-                    value="Basic-Chatbot-v1",
+                    value="Chatbot-Agentic-v3",
                     label="Select Chatbot Version"
                 )
 
