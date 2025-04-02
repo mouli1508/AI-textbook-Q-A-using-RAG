@@ -1,65 +1,81 @@
-# Agentic_Chatbot_v2
+# 🧠 Agentic Chatbot v2
 
-This second `Chatbot` class is an **advanced agentic version** of the first one. It not only handles chat but also **enables tool use** through **OpenAI function calling**, allowing the chatbot to take actions like updating user info or searching chat history dynamically. Let’s break down its functionalities and then highlight the key differences from the first version.
+This version of the chatbot goes beyond basic conversation.  
+It transforms the assistant into an **interactive agent** that can **call tools**, retrieve information, and update user data — all using OpenAI's function calling system.
+
+This is where we start to introduce **agentic behavior** and **custom function execution** into the flow.
+
+
+## 🔍 Core Functionalities
+
+### 1. 🧱 Initialization
+
+Much like the basic chatbot, the core components are initialized:
+- OpenAI client, model configs, session ID, etc.
+
+But this version **adds new capabilities**, including:
+
+- `Utils`: Converts Python functions into OpenAI-compatible JSON schemas
+- `SearchManager`: Allows the chatbot to query the SQL database using **keyword or phrase-based search**
+- `agent_functions`: A list of callable tools for the agent, including:
+  - `add_user_info_to_database`
+  - `search_chat_history`
 
 ---
 
-## 🔍 What This Class Does
+### 2. ⚙️ Function Execution
 
-### 1. **Initialization (`__init__`)**
-- Similar base setup as before (OpenAI client, config, chat model, summary model, etc.).
-- **Adds extra components:**
-  - `Utils`: Utility methods, including one to convert Python functions to OpenAI-compatible JSON schemas.
-  - `SearchManager`: Enables the chatbot to retrieve information from the SQL database using keyword/phrase-based search **(not semantic)**.
-  - `agent_functions`: A list of available functions (with schema) the chatbot can call, such as:
-    - `add_user_info_to_database`
-    - `search_chat_history`
+When the LLM calls a function:
+- The chatbot extracts the function name and arguments
+- Executes the corresponding method using `execute_function_call`
+- Returns both the **execution state** (e.g., success/failure) and the **result**
 
 ---
 
-### 2. **Function Execution (`execute_function_call`)**
-- Executes the appropriate function based on the name and arguments received from the OpenAI function call system.
-- Returns a tuple of `state` (e.g. success/failure) and the `result`.
+### 3. 🔁 Conversational Loop
 
----
+This is where the agentic behavior shines:
 
-### 3. **Conversational Flow (`chat` method)**
-This is where most of the new functionality lives:
-- **Agentic loop:** Runs until the conversation state is "finished". This loop allows multiple function calls to occur before finalizing a response.
-- **Dynamic system prompt:** Uses a specialized system prompt constructor `prepare_system_prompt_for_agentic_chatbot_v1` that includes:
-  - User info
+- The chatbot runs in a **loop** until the conversation is complete
+- It builds a **dynamic system prompt** that includes:
+  - User profile
   - Chat history
   - Summary
-  - Previous function calls and their results
-- **Handles function calling:** If the LLM requests a function call:
-  - Extracts function name and arguments
-  - Executes the function via `execute_function_call`
-  - Updates the prompt for the next loop iteration with the result of the call
-- **Limits function calls:** If the number of function calls exceeds a threshold, the chatbot is instructed to proceed without further tools.
-- **Returns final response** only once the model returns a message with plain content (not a function call).
+  - Previous tool calls and results
+
+- The LLM decides whether to:
+  - Respond directly
+  - Call a function
+  - Loop again with the new context
+
+- There's also a cap on function calls to avoid infinite loops or unnecessary tool usage.
 
 ---
 
-## 🔄 Key Differences from the First Version
+## 🔄 Key Differences vs. Basic Chatbot
 
-| Feature | **First Chatbot** | **Agentic Chatbot (This One)** |
-|--------|------------------|------------------------------|
-| **Chat Flow** | One-step, request-response | Multi-step with tool use and looping |
-| **Function Calling** | ❌ Not supported | ✅ Supported (OpenAI function calling) |
-| **Tools/Abilities** | Responds based on prompt only | Can take actions (e.g., update DB, search) |
-| **Search Functionality** | ❌ Not available | ✅ Can search previous chats using keyword/phrase search on the SQL DB|
-| **Utils Component** | ❌ Not used | ✅ Used to convert functions into schemas |
-| **Prompt Strategy** | Simple system prompt | Enhanced prompt with function call context |
-| **Error Feedback** | Basic exception handling | Detailed traceback included |
-| **Agent Memory Management** | Only chat + summary | Chat + summary + function interaction history |
-
----
-
-## 🧠 Summary
-This updated version of the chatbot is designed to act more like an **intelligent agent**, capable of calling backend functions, incorporating their results, and iterating on its behavior. It adds **dynamic behavior**, **better memory handling**, and **tool use**.
+| Feature | **Basic Chatbot** | **Agentic Chatbot v2** |
+|--------|-------------------|-------------------------|
+| **Chat Flow** | One-step response | Multi-step agentic loop |
+| **Function Calling** | ❌ None | ✅ OpenAI tools supported |
+| **Abilities** | Only responds | Updates DB, searches, adapts |
+| **Search Capability** | ❌ None | ✅ Phrase-based SQL search |
+| **Prompt Strategy** | Simple prompt | Prompt with call context |
+| **Error Handling** | Basic errors | Full tracebacks |
+| **Memory Handling** | Short-term only | Tracks function call memory |
 
 ---
 
-**Agentic_Chatbot_v2 Schema**
+## 🧠 Takeaway
 
-![Schema 4](../images/chatbot_v2.png)
+This chatbot acts more like an **autonomous assistant** — capable of reasoning, calling tools, and adjusting its output based on retrieved information.
+
+It bridges the gap between a passive chatbot and a goal-driven AI agent.
+
+---
+
+## 🧾 Architecture Overview
+
+Here’s the architecture of Agentic Chatbot v2:
+
+![Agentic Chatbot v2 Schema](../images/chatbot_v2.png)

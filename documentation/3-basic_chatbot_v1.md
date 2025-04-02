@@ -1,34 +1,61 @@
+# 🤖 Basic Chatbot
 
-# Basic Chatbot
+This is the simplest form of a memory-aware chatbot.  
+It uses OpenAI's chat models combined with persistent history management to enable short-term context retention across turns.
 
-This `Chatbot` class is designed to manage a full conversational experience with a user, integrating OpenAI's chat models with persistent user and chat history management. Here's a breakdown of what it does:
+The goal of this chatbot is to create a conversational loop that remembers **recent history**, personalizes replies based on **user info**, and summarizes past interactions — without advanced memory systems.
 
----
+## ⚙️ Core Functionalities
 
-### Core Functionalities:
+### 1. 🧱 Initialization
 
-#### 1. **Initialization (`__init__` method)**
-- **Configuration & Client Setup:** Loads model names, token limits, and database paths from a config file.
-- **Session Management:** Generates a unique `session_id` for each conversation session.
-- **Component Initialization:**
-  - `SQLManager`: Handles interactions with a database.
-  - `UserManager`: Retrieves or manages user-specific information.
-  - `ChatHistoryManager`: Manages ongoing chat history and conversation summaries.
-- **History Summary Retrieval:** Fetches the most recent summary of past interactions to provide context in future chats.
+When the `Chatbot` class is initialized, it sets up:
 
-#### 2. **Conversational Handling (`chat` method)**
-- **System Prompt Preparation:** Constructs a dynamic system prompt based on:
-  - User information (e.g., preferences, profile),
-  - Summary of previous conversations,
-  - Recent chat history.
-- **Model Invocation:** Sends the user message and the system prompt to the OpenAI chat model and gets a response.
-- **Chat History Management:**
-  - Adds the user message and assistant response to the chat history.
-  - Updates the ongoing summary of the conversation for future context.
-- **Error Handling:** Returns a readable error message if anything goes wrong during the API call.
+- ✅ **Model Configuration**  
+  Loads model names, token limits, and paths from a configuration file.
+
+- ✅ **Session ID Generation**  
+  Each chat session is assigned a unique ID for tracking.
+
+- ✅ **Components Setup**
+  - `SQLManager`: Connects to a local or remote database
+  - `UserManager`: Retrieves or stores user information
+  - `ChatHistoryManager`: Tracks message history and summaries
+
+- ✅ **Chat Summary Retrieval**  
+  Pulls the most recent conversation summary to preserve continuity in new prompts.
 
 ---
 
-**Basic Chatbot Schema**
+### 2. 💬 Conversational Handling
 
-![Schema](../images/basic_chatbot.png)
+When a message is received:
+
+- 📌 **System Prompt Construction**  
+  Dynamically builds a prompt including:
+  - User profile details
+  - A summary of earlier chats
+  - The last few message pairs
+
+- 🔁 **Model Invocation**  
+  Sends the prompt and user message to OpenAI's API and receives a reply.
+
+- 🧠 **Chat History Update**
+  - Stores the conversation pair in the database
+  - Updates the summary if needed to stay within context length
+
+- ⚠️ **Error Handling**  
+  Any issues during the API request return a readable error message.
+
+---
+
+## 🧾 Visual Overview
+
+Here’s a high-level schema showing how the basic chatbot works:
+
+![Basic Chatbot Architecture](../images/basic_chatbot.png)
+
+---
+
+> 🧩 This chatbot doesn’t support tool usage or long-term memory.  
+> But it’s a solid foundation for building more advanced, agentic systems.

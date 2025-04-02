@@ -1,54 +1,70 @@
-## 🧩 Frameworks for Building Agentic Memory: Theory Before Code
+# 🧩 Frameworks for Building Agentic Memory: Theory Before Code
 
-Now that we understand how memory works in theory — and have seen how we can design our own chatbot agents to support custom memory systems — let's talk about frameworks.
+Now that we’ve explored how memory systems work conceptually — and seen how to design our own chatbot agents — it’s time to talk about **frameworks**.
 
-As this space continues to grow rapidly, **frameworks play a huge role** in shaping how memory architectures are implemented in practice.
+Frameworks help streamline development, especially when it comes to handling:
+- Memory storage
+- Retrieval logic
+- Agent loops
+- Prompt construction
 
----
-
-### 🥇 LeTTA
-
-While I give LeTTA full credit for moving this field forward, I personally **do not recommend adopting their standalone framework** — at least not for production use.
-
-Here’s why:
-- It’s relatively new and lacks long-term support
-- Bigger platforms like LangChain are already **integrating similar capabilities**, which means higher maintainability, better documentation, and a broader ecosystem
-- The code that they provided in their online course a few months ago already does not work.
+As this space matures, choosing the right foundation becomes critical for long-term stability and scalability.
 
 ---
 
-### 🔄 Enter LangChain: The Production-Ready Option
+## 🥇 LeTTA
 
-While I was developing this project, **LangChain integrated native support for long-term memory** into their agent framework — and they did it impressively well.
+LeTTA introduced many of the ideas that pushed the field of long-term agentic memory forward.  
+They’ve published a framework that embodies their research and philosophy.
 
-They currently offer **two main strategies** for memory-aware agents. Let’s look at the first one.
+However, I personally **do not recommend using the LeTTA framework for production systems**, and here’s why:
 
----
+- ⚠️ It’s relatively **new** and **immature** in terms of ecosystem and tooling
+- 🧩 Larger, well-supported platforms like LangChain already offer **equivalent capabilities**
+- 🧪 The **sample code** they provided in their public course **is already outdated and non-functional**
+- 🔧 Debugging and extending the framework may require significant manual effort
 
-### 🧠 Strategy 1: Hybrid Memory with Vector + Graph Stores
-
-![Schema](../images/langgraph_tutorial.png)
-
-As shown in the diagram, LangChain agents can now be configured to:
-- Use **Vector Databases** to perform semantic retrieval over past messages or facts
-- Use **Graph Databases** to build structured profiles of users — like their interests, relationships, preferences, and behaviors
-
-This combination creates a powerful foundation for:
-- Personalized reasoning
-- Persistent user modeling
-- Adaptive, long-term conversations
-
-🧩 And what makes this really exciting is that LangChain handles the **retrieval**, **context construction**, and **prompt formatting** internally.
+You’re free to explore and learn from it — but for production-level reliability, I’d recommend more mature options.
 
 ---
 
-### 💻 Let’s See It in Action
+## 🔄 LangChain: The Production-Ready Option
 
-Now that we understand the theory, I’ll show you how to actually implement this in LangChain.
+While developing this project, I noticed that **LangChain introduced built-in support for long-term memory** in its agent framework — and it’s both robust and well-documented.
 
-We’ll walk through the code, see how to:
-- Set up memory stores,
-- Configure an agent,
-- And watch how it retrieves, combines, and uses memory in real-time.
+LangChain currently supports **two distinct memory strategies**, and we’ll explore both in this session.
 
-Let’s dive in.
+---
+
+## 🧠 Strategy 1: Hybrid Memory with Vector + Graph Databases
+
+![LangChain Memory Architecture](../images/langgraph_tutorial.png)
+
+This architecture uses a **hybrid memory system**:
+
+- 🟣 **VectorDB**: Stores embeddings of past messages for semantic recall
+- 🟠 **GraphDB**: Stores structured information about the user — like their interests, behavior, and network
+
+This approach gives agents the ability to:
+- Remember facts over time
+- Understand the user's profile
+- Adapt responses dynamically to context and history
+
+LangChain handles:
+- ✅ Retrieval
+- ✅ Prompt construction
+- ✅ Context formatting  
+...all under the hood.
+
+---
+
+## 💻 Let’s See It in Action
+
+Now let’s walk through the code together.
+
+We’ll cover:
+- How to initialize memory stores
+- How to wire them into an agent
+- And how the agent uses them to build intelligent, context-aware prompts in real time
+
+Let’s dive in!

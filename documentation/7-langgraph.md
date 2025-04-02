@@ -1,64 +1,88 @@
-## 🧠 LangChain’s Second Strategy for Long-Term Memory
+# 🧠 LangChain’s Second Strategy for Long-Term Memory
 
-Now let’s look at the second memory approach — the one recently introduced by **LangChain’s CEO in their course with DeepLearning.AI**.
+LangChain recently introduced a second approach to agent memory — inspired by **how humans organize memory**.
 
-This design takes inspiration from **human memory systems**, breaking memory into three distinct types:
-
----
-
-### 🧩 Types of Memory Modeled
-
-1. **Semantic Memory**  
-   - Stores *facts* about people, places, and things  
-   - Example: “User prefers morning meetings” or “Pizza is John’s favorite food”  
-   - Stored in a **VectorDB** for semantic retrieval  
-
-2. **Episodic Memory**  
-   - Captures *experiences* and *events*, like past interactions, preferences shared during chats, or actions taken  
-   - This is the system's memory of "what happened"  
-
-3. **Procedural Memory**  
-   - Represents *instincts* — things the agent just *knows to do*  
-   - These become part of the **system prompt**  
-   - Example: How to respond politely, or follow a certain tone based on prior feedback  
+This design was shared by LangChain’s CEO during a course with DeepLearning.AI, and it's structured around three types of memory:  
+**Semantic, Episodic, and Procedural**.
 
 ---
 
-### ⚙️ How It Works: The Memory Pipeline
+## 🧩 Types of Memory Modeled
 
-LangChain’s design uses a **triage router** to decide where a memory belongs:
-- Is it a fact? → Store it as *semantic*
-- Is it an experience or event? → Store as *episodic*
-- Is it a behavior change or instruction? → Store as *procedural*
+### 1. Semantic Memory
+- Stores **factual knowledge** about the world or the user  
+- Examples:
+  - “User prefers morning meetings”
+  - “John’s favorite food is pizza”
+- Stored in a **VectorDB** for semantic similarity retrieval
 
-When the user sends a message:
-1. The agent processes it and routes relevant content into one of these memory types
-2. The system retrieves past memory chunks as needed
-3. It **reconstructs the prompt dynamically** with updated instructions, facts, and reminders
-4. The LLM processes this enriched context and responds intelligently
+### 2. Episodic Memory
+- Stores **past experiences** and events  
+- This includes full or summarized chat interactions, task logs, and personal anecdotes  
+- Helps the agent remember “what happened”
+
+### 3. Procedural Memory
+- Stores **instincts or learned behaviors**  
+- These are injected into the **system prompt** and define how the agent should behave  
+- Example:
+  - “Always greet the user warmly”
+  - “Maintain a formal tone with this user”
 
 ---
 
-### 🔧 Tools in Use
+## ⚙️ How It Works — The Memory Pipeline
 
-LangChain uses dedicated tools for each memory type:
-- `manage_memory_tool` — updates or corrects memory entries
-- `search_memory_tool` — retrieves relevant context
-- `writing_tool`, `calendar_tool`, `scheduling_tool` — procedural actions triggered by memory
+LangChain uses a **triage mechanism** to decide where new memories should go:
 
-These tools work in concert, and the LLM decides whether to:
-- Respond,
-- Ignore,
-- Or notify the user — depending on the context and the type of memory involved.
+- Is it a fact? → Store in **Semantic Memory**
+- Is it a past event or story? → Store in **Episodic Memory**
+- Is it behavioral guidance? → Store in **Procedural Memory**
 
+Then, when the user sends a new message:
+1. The system **analyzes and routes the memory** appropriately
+2. It **retrieves relevant past context** from the different memory types
+3. It **builds a dynamic system prompt** with updated facts, experiences, and behavior rules
+4. The LLM generates a response based on this enriched context
 
-## Project schema
-
-![Schema](../images/langgraph_course.png)
 ---
 
-### 👨‍🏫 Let's See It in Action
+## 🔧 Tools Used by the Agent
 
-Now I’ll show you how this architecture works in practice — we’ll go through the actual implementation and demonstrate how the system stores, routes, and retrieves different types of memory in real-time using LangChain’s latest agent stack.
+To interact with these memory types, LangChain uses dedicated tools:
 
-Let’s dive into the code.
+- `manage_memory_tool` – update or revise memory entries  
+- `search_memory_tool` – retrieve semantic or episodic data  
+- `writing_tool`, `calendar_tool`, `scheduling_tool` – perform tasks based on remembered facts  
+
+The LLM can call these tools **intelligently and autonomously** depending on the context.
+
+It can:
+- Take actions
+- Decline to act
+- Or ask the user for clarification
+
+---
+
+## 🗺️ Architecture Overview
+
+![LangChain Memory Strategy Schema](../images/langgraph_course.png)
+
+This architecture supports:
+- Adaptive memory routing
+- Real-time context injection
+- Human-like memory segmentation
+
+It’s one of the most **comprehensive and flexible** memory strategies in production-ready LLM systems today.
+
+---
+
+## 👨‍🏫 Let's See It in Action
+
+Now let’s step into the code.
+
+We’ll explore:
+- How memories are created and stored
+- How LangChain routes and retrieves them
+- And how the agent uses this layered memory to behave intelligently in real time
+
+Let’s dive in.

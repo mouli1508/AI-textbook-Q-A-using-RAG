@@ -1,39 +1,68 @@
-# Agentic_Chatbot_v3
+# 🧠 Agentic Chatbot v3 — With Long-Term Semantic Memory
 
-This third version of the `Chatbot` class builds on the previous agentic versions but introduces **vector database integration** to **store and retrieve embeddings of chat content**, making the chatbot more context-aware and memory-rich over time.
+This third version builds on the agentic design of v2, but adds a powerful new layer:  
+**vector database integration** for semantic memory.
 
----
-
-## 🔍 What This Chatbot Does
-
-### 1. **Initialization (`__init__`)**
-- Similar setup with OpenAI, config, session, and database managers.
-- Adds a new component:
-  - `VectorDBManager`: Manages a vector database (Chroma) used for embedding-based search and memory updates.
-- Updates the list of agent-callable functions to include:
-  - `add_user_info_to_database`
-  - `search_vector_db` (replaces earlier `search_chat_history`)
+With this, the chatbot becomes more context-aware, capable of retrieving relevant past conversations even if the wording is different.  
+It simulates long-term memory — something that wasn't possible in the earlier versions.
 
 ---
 
-### 2. **Function Execution (`execute_function_call`)**
-- Executes functions called by the LLM.
-- Now supports vector DB search via `search_vector_db`.
+## 🔍 Core Functionalities
+
+### 1. 🧱 Initialization
+
+As before, the chatbot loads all the foundational components:
+- OpenAI client
+- Configurations
+- Session ID
+- SQL-based managers
+
+But now it adds:
+- **`VectorDBManager`** — connects to a vector database (e.g., Chroma) for storing and retrieving embeddings of past conversations.
+
+It also updates the list of tools (functions the agent can call) to include:
+- `add_user_info_to_database`
+- `search_vector_db` (replacing `search_chat_history` from v2)
 
 ---
 
-### 3. **Conversational Loop (`chat`)**
-- Same **agentic loop** approach as the second version:
-  - Handles function calls, tracks history and function call results, enforces a function call limit.
-- Uses an updated system prompt builder: `prepare_system_prompt_for_agentic_chatbot_v2`, which likely tailors the prompt for vector-aware capabilities.
+### 2. ⚙️ Function Execution
 
-### 4. **New VectorDB Update**
-- After the assistant sends a final response, the user-assistant message pair is **converted into a single string** and stored in the vector DB:
-  ```python
-  msg_pair = f"user: {user_message}, assistant: {assistant_response}"
-  self.vector_db_manager.update_vector_db(msg_pair)
-  ```
-- This lets the chatbot **"remember" past conversations semantically** and use that memory later.
+The chatbot supports OpenAI function calling.  
+Now, when the model asks to search memory, it can do so **semantically** using vector similarity rather than keyword matching.
+
+This leads to more relevant, nuanced, and context-aware behavior.
+
+---
+
+### 3. 🔁 Conversational Loop
+
+Same looping architecture as v2:
+- The chatbot keeps prompting the model until a final response is ready
+- It handles tool calls, updates chat history, and builds a dynamic system prompt using:
+  - User info
+  - Chat summary
+  - Chat history
+  - Function call results
+  - And now: vector memory!
+
+The system prompt uses a new builder:  
+`prepare_system_prompt_for_agentic_chatbot_v2` — designed to support semantic memory and vector search results.
+
+---
+
+### 4. 🧠 Vector Memory Update
+
+After every conversation:
+
+```python
+msg_pair = f"user: {user_message}, assistant: {assistant_response}"
+self.vector_db_manager.update_vector_db(msg_pair)
+```
+This message pair is embedded and stored in the vector database.
+
+That means the next time the user asks a related question, the chatbot can recall this past exchange even if it's phrased differently.
 
 ---
 
@@ -51,17 +80,111 @@ This third version of the `Chatbot` class builds on the previous agentic version
 
 ---
 
-## 🧠 Summary
-
-This third version transforms the chatbot into a **hybrid conversational agent** with:
-- Multi-turn reasoning via OpenAI tools
-- Real-time database interaction
-- **Long-term memory** via vector embeddings
-
-This enables the chatbot to not only perform actions but also **grow smarter over time**, remember past conversations in a meaningful way, and retrieve relevant information using **semantic similarity** rather than just string matches. It's a big step toward creating an intelligent assistant that learns and adapts.
+Here’s your polished, audience-ready Markdown version of the **Agentic_Chatbot_v3** section for your presentation or documentation:
 
 ---
 
-**Agentic_Chatbot_v3 Schema**
+```markdown
+---
 
-![Schema 5](../images/chatbot_v3.png)
+# 🧠 Agentic Chatbot v3 — With Long-Term Semantic Memory
+
+This third version builds on the agentic design of v2, but adds a powerful new layer:  
+**vector database integration** for semantic memory.
+
+With this, the chatbot becomes more context-aware, capable of retrieving relevant past conversations even if the wording is different.  
+It simulates long-term memory — something that wasn't possible in the earlier versions.
+
+---
+
+## 🔍 Core Functionalities
+
+### 1. 🧱 Initialization
+
+As before, the chatbot loads all the foundational components:
+- OpenAI client
+- Configurations
+- Session ID
+- SQL-based managers
+
+But now it adds:
+- **`VectorDBManager`** — connects to a vector database (e.g., Chroma) for storing and retrieving embeddings of past conversations.
+
+It also updates the list of tools (functions the agent can call) to include:
+- `add_user_info_to_database`
+- `search_vector_db` (replacing `search_chat_history` from v2)
+
+---
+
+### 2. ⚙️ Function Execution
+
+The chatbot supports OpenAI function calling.  
+Now, when the model asks to search memory, it can do so **semantically** using vector similarity rather than keyword matching.
+
+This leads to more relevant, nuanced, and context-aware behavior.
+
+---
+
+### 3. 🔁 Conversational Loop
+
+Same looping architecture as v2:
+- The chatbot keeps prompting the model until a final response is ready
+- It handles tool calls, updates chat history, and builds a dynamic system prompt using:
+  - User info
+  - Chat summary
+  - Chat history
+  - Function call results
+  - And now: vector memory!
+
+The system prompt uses a new builder:  
+`prepare_system_prompt_for_agentic_chatbot_v2` — designed to support semantic memory and vector search results.
+
+---
+
+### 4. 🧠 Vector Memory Update
+
+After every conversation:
+
+```python
+msg_pair = f"user: {user_message}, assistant: {assistant_response}"
+self.vector_db_manager.update_vector_db(msg_pair)
+```
+
+This message pair is embedded and stored in the vector database.
+
+That means the next time the user asks a related question, the chatbot can **recall this past exchange** even if it's phrased differently.
+
+---
+
+## 🔄 Evolution of the Chatbots
+
+| Feature | **V1: Basic Chatbot** | **V2: Agentic Chatbot** | **V3: Vector-Aware Agentic Chatbot (This)** |
+|--------|------------------------|--------------------------|---------------------------------------------|
+| **Chat Flow** | Simple Q&A | Agent loop with function calls | Agent loop with memory + vector updates |
+| **Function Calling** | ❌ None | ✅ Yes | ✅ Yes (incl. semantic search) |
+| **Tools** | None | `add_user_info_to_database`, `search_chat_history` | `add_user_info_to_database`, `search_vector_db` |
+| **Search Capability** | ❌ None | ✅ Phrase-based (SQL) | ✅ Semantic (VectorDB) |
+| **Memory System** | Chat + Summary | Chat + Summary + SQL Results | Chat + Summary + **Semantic Memory** |
+| **Prompt Builder** | `prepare_system_prompt` | `prepare_system_prompt_for_agentic_chatbot_v1` | `...v2` with vector context |
+| **Knowledge Retention** | Temporary | Short-term only | **Long-term, semantic-aware** |
+
+---
+
+## 🧠 Final Thoughts
+
+This chatbot represents a **hybrid agent** — blending dynamic tool use with smart, long-term memory.
+
+It:
+- Understands conversations across sessions
+- Grows more intelligent over time
+- Uses semantic reasoning to bring relevant context into its responses
+
+This is the blueprint for building **truly intelligent assistants** — not just reactive models, but adaptive agents.
+
+---
+
+## 🧾 Architecture Overview
+
+Here’s the architecture of Agentic Chatbot v3:
+
+![Agentic Chatbot v3 Schema](../images/chatbot_v3.png)
