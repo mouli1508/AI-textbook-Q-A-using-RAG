@@ -62,5 +62,15 @@ The result is a chatbot that appears consistent, aware, and helpful across conve
 
 ---
 
+## 🧾Lost in the Middle
+
+[Paper](https://arxiv.org/pdf/2307.03172)
+
+<img src="../images/lost-in-the-middle.jpg" alt="Prompt Memory Layout Schema" width="1000"/>
+
+---
+
 > ✅ Memory in LLMs is not magic — it’s a system design.  
 > The better your design, the smarter and more helpful your assistant becomes.
+
+---
