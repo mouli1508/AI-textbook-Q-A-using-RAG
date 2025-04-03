@@ -1,8 +1,8 @@
 # 🧩 Frameworks for Building Agentic Memory: Theory Before Code
 
-Now that we’ve explored how memory systems work conceptually — and seen how to design our own chatbot agents — it’s time to talk about **frameworks**.
+Now that we've explored how memory systems work conceptually and seen how to design our own chatbot agents, it's time to talk about **frameworks**.
 
-Frameworks help streamline development, especially when it comes to handling:
+Frameworks allow an easier development, especially when it comes to handling:
 - Memory storage
 - Retrieval logic
 - Agent loops
@@ -15,24 +15,24 @@ As this space matures, choosing the right foundation becomes critical for long-t
 ## 🥇 LeTTA
 
 LeTTA introduced many of the ideas that pushed the field of long-term agentic memory forward.  
-They’ve published a framework that embodies their research and philosophy.
+They've published a framework that embodies their research and philosophy.
 
-However, I personally **do not recommend using the LeTTA framework for production systems**, and here’s why:
+However, I personally **do not recommend using the LeTTA framework for production systems**, and here's why:
 
-- ⚠️ It’s relatively **new** and **immature** in terms of ecosystem and tooling
+- ⚠️ It's relatively **new** and **immature** in terms of ecosystem and tooling
 - 🧩 Larger, well-supported platforms like LangChain already offer **equivalent capabilities**
 - 🧪 The **sample code** they provided in their public course **is already outdated and non-functional**
 - 🔧 Debugging and extending the framework may require significant manual effort
 
-You’re free to explore and learn from it — but for production-level reliability, I’d recommend more mature options.
+You're free to explore and learn from it — but for production-level reliability, I'd recommend more mature options.
 
 ---
 
 ## 🔄 LangChain: The Production-Ready Option
 
-While developing this project, I noticed that **LangChain introduced built-in support for long-term memory** in its agent framework — and it’s both robust and well-documented.
+While developing this project, I noticed that **LangChain introduced built-in support for long-term memory** in its agent framework — and it's both robust and well-documented.
 
-LangChain currently supports **two distinct memory strategies**, and we’ll explore both in this session.
+LangChain currently supports **two distinct memory strategies**, and we'll explore both in this session.
 
 ---
 
@@ -58,13 +58,13 @@ LangChain handles:
 
 ---
 
-## 💻 Let’s See It in Action
+## 💻 Let's See It in Action
 
-Now let’s walk through the code together.
+Now let's walk through the code together.
 
-We’ll cover:
+We'll cover:
 - How to initialize memory stores
 - How to wire them into an agent
 - And how the agent uses them to build intelligent, context-aware prompts in real time
 
-Let’s dive in!
+Let's dive in!

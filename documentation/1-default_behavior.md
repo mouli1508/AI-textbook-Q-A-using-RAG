@@ -14,7 +14,7 @@ However, **they do not have memory by default**, which means:
 Unlike humans or stateful systems, LLMs are:
 
 - **Stateless**: Every prompt is treated as a brand new request, with no awareness of previous conversations.
-- **Context-limited**: They only "see" what’s in the current prompt.
+- **Context-limited**: They only "see" what's in the current prompt.
 
 ---
 
@@ -36,7 +36,7 @@ Unless memory is engineered on top, this cycle repeats every time.
 
 Without memory:
 - The user must constantly repeat context.
-- The LLM can’t build a personalized relationship or learn user preferences.
+- The LLM can't build a personalized relationship or learn user preferences.
 - Multi-step tasks become harder to complete.
 - Emotional, historical, or task continuity is lost between interactions.
 

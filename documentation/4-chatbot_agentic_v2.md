@@ -1,7 +1,7 @@
 # 🧠 Agentic Chatbot v2
 
 This version of the chatbot goes beyond basic conversation.  
-It transforms the assistant into an **interactive agent** that can **call tools**, retrieve information, and update user data — all using OpenAI's function calling system.
+It transforms the assistant into an **interactive agent** that can **call tools**, retrieve information, and update user data, all using OpenAI's function calling system.
 
 This is where we start to introduce **agentic behavior** and **custom function execution** into the flow.
 
@@ -76,6 +76,6 @@ It bridges the gap between a passive chatbot and a goal-driven AI agent.
 
 ## 🧾 Architecture Overview
 
-Here’s the architecture of Agentic Chatbot v2:
+Here's the architecture of Agentic Chatbot v2:
 
 ![Agentic Chatbot v2 Schema](../images/chatbot_v2.png)

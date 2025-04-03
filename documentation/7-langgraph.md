@@ -1,8 +1,8 @@
-# 🧠 LangChain’s Second Strategy for Long-Term Memory
+# 🧠 LangChain's Second Strategy for Long-Term Memory
 
 LangChain recently introduced a second approach to agent memory — inspired by **how humans organize memory**.
 
-This design was shared by LangChain’s CEO during a course with DeepLearning.AI, and it's structured around three types of memory:  
+This design was shared by LangChain's CEO during a course with DeepLearning.AI, and it's structured around three types of memory:  
 **Semantic, Episodic, and Procedural**.
 
 ---
@@ -13,7 +13,7 @@ This design was shared by LangChain’s CEO during a course with DeepLearning.AI
 - Stores **factual knowledge** about the world or the user  
 - Examples:
   - “User prefers morning meetings”
-  - “John’s favorite food is pizza”
+  - “John's favorite food is pizza”
 - Stored in a **VectorDB** for semantic similarity retrieval
 
 ### 2. Episodic Memory
@@ -72,17 +72,17 @@ This architecture supports:
 - Real-time context injection
 - Human-like memory segmentation
 
-It’s one of the most **comprehensive and flexible** memory strategies in production-ready LLM systems today.
+It's one of the most **comprehensive and flexible** memory strategies in production-ready LLM systems today.
 
 ---
 
 ## 👨‍🏫 Let's See It in Action
 
-Now let’s step into the code.
+Now let's step into the code.
 
-We’ll explore:
+We'll explore:
 - How memories are created and stored
 - How LangChain routes and retrieves them
 - And how the agent uses this layered memory to behave intelligently in real time
 
-Let’s dive in.
+Let's dive in.

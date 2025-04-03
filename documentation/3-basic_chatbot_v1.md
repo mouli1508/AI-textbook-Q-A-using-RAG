@@ -3,7 +3,7 @@
 This is the simplest form of a memory-aware chatbot.  
 It uses OpenAI's chat models combined with persistent history management to enable short-term context retention across turns.
 
-The goal of this chatbot is to create a conversational loop that remembers **recent history**, personalizes replies based on **user info**, and summarizes past interactions — without advanced memory systems.
+The goal of this chatbot is to create a conversational loop that remembers **recent history**, personalizes replies based on **user info**, and summarizes past interactions, without advanced memory systems.
 
 ## ⚙️ Core Functionalities
 
@@ -51,11 +51,11 @@ When a message is received:
 
 ## 🧾 Visual Overview
 
-Here’s a high-level schema showing how the basic chatbot works:
+Here's a high-level schema showing how the basic chatbot works:
 
 ![Basic Chatbot Architecture](../images/basic_chatbot.png)
 
 ---
 
-> 🧩 This chatbot doesn’t support tool usage or long-term memory.  
-> But it’s a solid foundation for building more advanced, agentic systems.
+> 🧩 This chatbot doesn't support tool usage or long-term memory.  
+> But it's a solid foundation for building more advanced, agentic systems.
