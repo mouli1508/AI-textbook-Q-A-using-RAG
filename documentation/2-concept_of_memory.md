@@ -58,7 +58,7 @@ A smart system will:
 - Inject it into the right part of the prompt
 - Update and adapt the memory based on feedback and actions
 
-The result is a chatbot that appears consistent, aware, and helpful across conversations — even though the model itself has no actual memory.
+The result is a chatbot that appears consistent, aware, and helpful across conversations, even though the model itself has no actual memory.
 
 ---
 
