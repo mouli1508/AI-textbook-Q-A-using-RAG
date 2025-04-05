@@ -123,7 +123,7 @@ images/
 ├── requirements.txt
 ```
 **`src` Folder Structure**
-![Schema 8](images/src_folder_structure.png)
+![Schema 8](images/src_schema.png)
 
 
 
