@@ -19,7 +19,7 @@ class Config:
         self.max_characters = config["chat_history_config"]["max_characters"]
         self.max_tokens = config["chat_history_config"]["max_tokens"]
         # search_config
-        self.num_retrieved_content = config["search_config"]["num_retrieved_content"]
+        # self.num_retrieved_content = config["search_config"]["num_retrieved_content"]
         # agent_config
         self.max_function_calls = config["agent_config"]["max_function_calls"]
         # vectordb_config
