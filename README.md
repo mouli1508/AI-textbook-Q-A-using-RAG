@@ -20,6 +20,8 @@ PDF available in the repo: `letta/MemGPT_Paper.pdf`
 
 ## 💾 How to Run the Project
 
+⚠️ Note: Please use Python 3.11 as Python 3.12 may cause compatibility issues with some dependencies.
+
 1. **Create a virtual environment**  
    ```bash
    python -m venv venv

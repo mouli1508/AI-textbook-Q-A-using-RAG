@@ -3,7 +3,7 @@ gradio==5.23.1
 ipython==8.12.3
 openai==1.69.0
 pandas==2.2.3
-pydantic==2.11.1
+pydantic
 pyprojroot==0.3.0
 python-dotenv==1.1.0
 PyYAML==6.0.2
@@ -13,7 +13,6 @@ typing_extensions==4.13.0
 langchain==0.3.20
 langgraph==0.3.5
 langmem==0.0.16
-letta==0.6.37
 ipykernel==6.29.5
 SQLAlchemy
 db-sqlite3
