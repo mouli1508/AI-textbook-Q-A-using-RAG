@@ -1,9 +1,6 @@
 
 
 def prepare_system_prompt(user_info: str, chat_summary: str, chat_history: str) -> str:
-    user_info = ""
-    chat_summary = ""
-    chat_history = ""
     prompt = """You are a professional assistant of the following user.
 
     {user_info}
