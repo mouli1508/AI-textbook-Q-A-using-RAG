@@ -34,7 +34,6 @@ class Chatbot:
 
         self.chat_history_manager = ChatHistoryManager(
             self.sql_manager, self.user_manager.user_id, self.session_id, self.client, self.summary_model, self.cfg.max_tokens)
-        self.previous_summary = self.chat_history_manager.get_latest_summary()
 
     def chat(self, user_message: str) -> str:
         """
@@ -46,9 +45,11 @@ class Chatbot:
         Returns:
             str: The chatbot's response or an error message.
         """
+        self.previous_summary = self.chat_history_manager.get_latest_summary()
         system_prompt = prepare_system_prompt(self.user_manager.user_info,
                                               self.previous_summary,
                                               self.chat_history_manager.chat_history)
+        print("System prompt:", system_prompt)
         try:
             response = self.client.chat.completions.create(
                 model=self.chat_model,

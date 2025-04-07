@@ -132,6 +132,7 @@ class ChatHistoryManager:
             client (OpenAI): The client object used for calling the AI model.
             summary_model (str): The model name to use for summarization.
         """
+        print("pairs_since_last_summary:", self.pairs_since_last_summary)
         if self.pairs_since_last_summary < max_history_pairs:
             return None
         # Fetch the latest two pairs (if available)
@@ -142,17 +143,19 @@ class ChatHistoryManager:
 
         # Only generate a new summary if there are exactly two pairs
         if len(chat_data) <= max_history_pairs:
+            print("Insufficient chat data. Skipping summary.")
             return
 
-        summary_text = self.generate_summary_based_on_characers(
+        summary_text = self.generate_summary_based_on_characters(
             self.client, self.summary_model, chat_data, previous_summary)
+        # print("Generated summary:", summary_text)
 
         if summary_text:
             self.save_summary_to_db(summary_text)
             self.pairs_since_last_summary = 0  # Reset the counter after a summary
             print("Chat history summary generated and saved to database.")
 
-    def generate_summary_based_on_characers(
+    def generate_summary_based_on_characters(
         self,
         client: OpenAI,
         summary_model: str,
