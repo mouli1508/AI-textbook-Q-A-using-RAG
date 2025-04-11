@@ -45,7 +45,7 @@ class SearchManager:
             # Ensure the results maintain the order of question, then answer
             formatted_results = [(q, a, t) for q, a, t in results]
             if formatted_results == []:
-                return "Function call successful.", "No results found. Please try again with a different word."
+                return "Function call failed.", "No results found. Please try again with a different word."
 
             num_characters = self.utils.count_number_of_characters(
                 str(results))
