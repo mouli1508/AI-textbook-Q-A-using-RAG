@@ -4,8 +4,8 @@ from utils.chatbot_agentic_v2 import Chatbot as Chatbot_v2
 from utils.chatbot_agentic_v3 import Chatbot as Chatbot_v3
 
 # If you'd like to chat with a different chatbot, modify the code manually.
-chatbot_version = "basic"
-# chatbot_version = "v2"
+# chatbot_version = "basic"
+chatbot_version = "v2"
 # chatbot_version = "v3"
 
 if __name__ == "__main__":
