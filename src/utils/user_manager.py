@@ -69,6 +69,9 @@ class UserManager:
         Returns:
             bool: True if the update was successful, False if invalid keys are provided.
         """
+        print("Entering the add user info function")
+        print("kwargs:", kwargs)
+        print(type(kwargs))
         try:
             valid_keys = {"name", "last_name", "age", "gender",
                           "location", "occupation", "interests"}
@@ -81,7 +84,7 @@ class UserManager:
             if "interests" in kwargs and isinstance(kwargs["interests"], list):
                 # Step 1: Fetch current interests from DB
                 query = "SELECT interests FROM user_info LIMIT 1;"
-                result = self.sql_manager.fetch_one(query)
+                result = self.sql_manager.execute_query(query)
 
                 existing_interests = []
                 if result and result[0]:
