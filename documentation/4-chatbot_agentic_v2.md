@@ -4,13 +4,14 @@ This version of the chatbot transforms the assistant into an **interactive agent
 
 This is where we start to introduce **agentic behavior** and **custom function execution** into the flow.
 
-
 ## 🔍 Core Functionalities
 
-### 1. 🧱 Initialization
+### 🔧 1. **System Initialization**
 
-Much like the basic chatbot, the core components are initialized:
-- OpenAI client, model configs, session ID, etc.
+Similar to the Basic Chatbot, when the chatbot starts, it sets up:
+- **OpenAI Client** – to talk to the GPT model.
+- **User & Chat Managers** – to track who's talking and store what's been said.
+- **Configuration** – loads temperature, max tokens, model name, etc.
 
 But this version **adds new capabilities**, including:
 
@@ -20,36 +21,68 @@ But this version **adds new capabilities**, including:
   - `add_user_info_to_database`
   - `search_chat_history`
 
+> Think of this as preparing the brain, memory, and tools for the conversation.
+
+### 💬 2. **Conversation Flow**
+
+Each user message follows a **loop** that looks like this:
+
+1. **User sends a message**  
+2. **Chatbot builds a prompt**:
+   - Includes:
+     - Current user message
+     - Recent chat history
+     - A summary of earlier conversations
+     - Any previous function results (if any)
+
+3. **Prompt sent to GPT with special powers**:
+   - The model can **either reply directly** or
+   - **Request to call a function** (like "search_chat_history" or "add_user_info_to_database")
+
+4. **If a function is requested**:
+   - The chatbot **executes the function**
+   - **Saves the result**
+   - Builds a new system prompt including the result
+   - **Loops back** to GPT for a final response
+
+5. **If there's no function or after executing one**, the chatbot:
+   - **Stores the conversation** in a local database
+   - **Updates the summary**
+   - Sends the final response to the user
+
+
+### ⚙️ 3. **Function Execution Mechanism**
+
+The chatbot supports **JSON-based function calling**, where GPT decides *what tool to use* and *what arguments to provide*:
+
+For example:
+- GPT might say:  
+  “Call `add_user_info_to_database` with this info: `name=John, age=32`”
+- The chatbot executes that function
+- Returns the success/failure result back to GPT
+- GPT continues the conversation with updated context
+
 ---
 
-### 2. ⚙️ Function Execution
+### 📦 4. **Components Overview**
 
-When the LLM calls a function:
-- The chatbot extracts the function name and arguments
-- Executes the corresponding method using `execute_function_call`
-- Returns both the **execution state** (e.g., success/failure) and the **result**
-
----
-
-### 3. 🔁 Conversational Loop
-
-This is where the agentic behavior shines:
-
-- The chatbot runs in a **loop** until the conversation is complete
-- It builds a **dynamic system prompt** that includes:
-  - User profile
-  - Chat history
-  - Summary
-  - Previous tool calls and results
-
-- The LLM decides whether to:
-  - Respond directly
-  - Call a function
-  - Loop again with the new context
-
-- There's also a cap on function calls to avoid infinite loops or unnecessary tool usage.
+| Component | Purpose |
+|----------|---------|
+| `UserManager` | Tracks user data, saves it to DB |
+| `ChatHistoryManager` | Manages the long-term memory |
+| `SearchManager` | Allows GPT to search previous chats |
+| `Utils` | Helps format function schemas |
+| `prepare_system_prompt` | Builds the "brain state" prompt for GPT |
+| `Config` | Handles settings like model, temperature, etc. |
 
 ---
+
+### 🔁 5. **Failsafe Mechanism**
+
+If GPT requests **too many functions** (e.g., in a loop), or **fails**, a fallback mechanism triggers:
+- GPT is called again without function access
+- Generates a direct response from available context
+
 
 ## 🔄 Key Differences vs. Basic Chatbot
 
@@ -60,16 +93,8 @@ This is where the agentic behavior shines:
 | **Abilities** | Only responds | Updates DB, searches, adapts |
 | **Search Capability** | ❌ None | ✅ Phrase-based SQL search |
 | **Prompt Strategy** | Simple prompt | Prompt with call context |
-| **Error Handling** | Basic errors | Full tracebacks |
+| **Fallback Strategy** | ❌ None | ✅ Includes a fallback mechanism|
 | **Memory Handling** | Short-term only | Tracks function call memory |
-
----
-
-## 🧠 Takeaway
-
-This chatbot acts more like an **autonomous assistant** — capable of reasoning, calling tools, and adjusting its output based on retrieved information.
-
-It bridges the gap between a passive chatbot and a goal-driven AI agent.
 
 ---
 
@@ -77,4 +102,4 @@ It bridges the gap between a passive chatbot and a goal-driven AI agent.
 
 Here's the architecture of Agentic Chatbot v2:
 
-![Agentic Chatbot v2 Schema](../images/chatbot_v2.png)
+![Agentic Chatbot v2 Schema](../images/chatbot_agentic_v2.png)
