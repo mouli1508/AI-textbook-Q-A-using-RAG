@@ -23,6 +23,8 @@ But this version **adds new capabilities**, including:
 
 > Think of this as preparing the brain, memory, and tools for the conversation.
 
+---
+
 ### 💬 2. **Conversation Flow**
 
 Each user message follows a **loop** that looks like this:
@@ -50,6 +52,7 @@ Each user message follows a **loop** that looks like this:
    - **Updates the summary**
    - Sends the final response to the user
 
+---
 
 ### ⚙️ 3. **Function Execution Mechanism**
 
