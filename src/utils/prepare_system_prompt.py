@@ -22,8 +22,6 @@ def prepare_system_prompt(user_info: str, chat_summary: str, chat_history: str) 
 
 
 def prepare_system_prompt_for_agentic_chatbot_v2(user_info: str, chat_summary: str, chat_history: str, function_call_result_section: str) -> str:
-    if not function_call_result_section:
-        function_call_result_section = ""
 
     prompt = """## You are a professional assistant of the following user.
 
@@ -70,8 +68,6 @@ def prepare_system_prompt_for_agentic_chatbot_v2(user_info: str, chat_summary: s
 
 
 def prepare_system_prompt_for_agentic_chatbot_v3(user_info: str, chat_summary: str, chat_history: str, function_call_result_section: str) -> str:
-    if not function_call_result_section:
-        function_call_result_section = ""
 
     prompt = """## You are a professional assistant of the following user.
 
