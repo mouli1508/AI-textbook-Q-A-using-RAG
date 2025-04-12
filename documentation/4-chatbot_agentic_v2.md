@@ -10,7 +10,7 @@ This is where we start to introduce **agentic behavior** and **custom function e
 
 Similar to the Basic Chatbot, when the chatbot starts, it sets up:
 - **OpenAI Client** – to talk to the GPT model.
-- **User & Chat Managers** – to track who's talking and store what's been said.
+- **UserManager & ChatHistoryManager** – to track who's talking and store what's been said and adding the long-term memory to our system.
 - **Configuration** – loads temperature, max tokens, model name, etc.
 
 But this version **adds new capabilities**, including:
