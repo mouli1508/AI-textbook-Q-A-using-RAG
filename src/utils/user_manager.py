@@ -58,6 +58,7 @@ class UserManager:
     def add_user_info_to_database(self, **kwargs: dict) -> str:
         """
         Updates the user information in the database if valid keys are provided.
+        Merges interests instead of overwriting them.
 
         Args:
             user_info (dict): Dictionary containing user attributes to update.
@@ -75,9 +76,27 @@ class UserManager:
 
             # Convert interests list to comma-separated string if provided
             if "interests" in kwargs and isinstance(kwargs["interests"], list):
-                kwargs["interests"] = ", ".join(kwargs["interests"])
+                # Step 1: Fetch current interests from DB
+                query = "SELECT interests FROM user_info LIMIT 1;"
+                result = self.sql_manager.fetch_one(query)
 
-            # Prepare the SET clause for updating only provided fields
+                existing_interests = []
+                if result and result[0]:
+                    existing_interests = [
+                        i.strip() for i in result[0].split(",") if i.strip()]
+
+                 # Step 2: Convert new interests to set
+                new_interests = [i.strip()
+                                 for i in kwargs["interests"] if isinstance(i, str)]
+
+                # Step 3: Merge and remove duplicates
+                merged_interests = sorted(
+                    set(existing_interests + new_interests))
+
+                # Step 4: Convert back to comma-separated string
+                kwargs["interests"] = ", ".join(merged_interests)
+
+            # Prepare the SET clause
             set_clause = ", ".join([f"{key} = ?" for key in kwargs.keys()])
             params = tuple(kwargs.values())
 
