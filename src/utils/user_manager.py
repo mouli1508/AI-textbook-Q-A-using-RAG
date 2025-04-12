@@ -44,6 +44,9 @@ class UserManager:
             return {k: v for k, v in user_info.items() if v not in (None, "") and not (isinstance(v, float) and math.isnan(v))}
         return None
 
+    def refresh_user_info(self):
+        self.user_info = self.get_user_info()
+
     def get_user_id(self) -> Optional[Dict[str, Any]]:
         """
         Retrieves the user ID from the database.
