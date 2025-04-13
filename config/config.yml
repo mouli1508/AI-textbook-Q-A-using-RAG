@@ -3,7 +3,7 @@ directories:
   vectordb_dir: "data/vectordb"
 
 llm_config:
-  chat_model: "gpt-4o-mini"
+  chat_model: "gpt-4o"
   summary_model: "gpt-3.5-turbo"
   rag_model: "gpt-4o-mini"
   temperature: 0.0

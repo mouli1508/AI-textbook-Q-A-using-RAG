@@ -100,7 +100,7 @@ class Chatbot:
                         f"- The assistant attempted to call `{function_name}` with the following arguments:\n"
                         + "".join([f"  - {k}: {v}\n" for k,
                                    v in function_args.items()])
-                        + f"- Outcome: ❌ {function_call_state}\n\n"
+                        + f"- Outcome: ❌ {function_call_state} - {function_call_result}\n\n"
                         "Please assist the user based on this result."
                     )
 
