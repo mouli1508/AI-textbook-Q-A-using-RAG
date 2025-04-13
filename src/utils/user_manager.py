@@ -1,5 +1,5 @@
 import math
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Tuple
 from utils.sql_manager import SQLManager
 
 
@@ -58,16 +58,13 @@ class UserManager:
         user = self.sql_manager.execute_query(query, fetch_one=True)
         return user[0] if user else None
 
-    def add_user_info_to_database(self, user_info: dict) -> str:
+    def add_user_info_to_database(self, user_info: dict) -> Tuple[str, str]:
         """
         Updates the user information in the database if valid keys are provided.
         Merges interests instead of overwriting them.
 
         Args:
             user_info (dict): Dictionary containing user attributes to update.
-
-        Returns:
-            bool: True if the update was successful, False if invalid keys are provided.
         """
         print("Entering the add user info function")
         try:
