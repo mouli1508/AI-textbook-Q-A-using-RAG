@@ -39,7 +39,7 @@ def prepare_system_prompt_for_agentic_chatbot_v2(user_info: str, chat_summary: s
 
     - If you need more information about the user or details from previous conversations to answer the user's question, use the search_chat_history function.
     - Monitor the conversation, and if the user provides any of the following details that differ from the initial information, call this function to update 
-    the user's database record.
+    the user's database record. Do not call the function unless you have enough information or the full context.
 
     ### Keys for Updating the User's Information:
 
