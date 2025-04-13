@@ -32,6 +32,7 @@ Each user message follows a **loop** that looks like this:
 1. **User sends a message**  
 2. **Chatbot builds a prompt**:
    - Includes:
+     - User info
      - Current user message
      - Recent chat history
      - A summary of earlier conversations
