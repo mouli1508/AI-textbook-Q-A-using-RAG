@@ -111,8 +111,6 @@ class Chatbot:
                                                                              self.previous_summary,
                                                                              self.chat_history,
                                                                              function_call_result_section)
-                # self.chat_history.append(
-                #     (function_call_prompt, function_call_state))
                 print("\n\n==========================================")
                 print(f"System prompt: {system_prompt}")
 
