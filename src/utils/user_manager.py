@@ -58,7 +58,7 @@ class UserManager:
         user = self.sql_manager.execute_query(query, fetch_one=True)
         return user[0] if user else None
 
-    def add_user_info_to_database(self, **kwargs: dict) -> str:
+    def add_user_info_to_database(self, user_info: dict) -> str:
         """
         Updates the user information in the database if valid keys are provided.
         Merges interests instead of overwriting them.
@@ -70,18 +70,16 @@ class UserManager:
             bool: True if the update was successful, False if invalid keys are provided.
         """
         print("Entering the add user info function")
-        print("kwargs:", kwargs)
-        print(type(kwargs))
         try:
             valid_keys = {"name", "last_name", "age", "gender",
                           "location", "occupation", "interests"}
 
-            for key in kwargs.keys():
+            for key in user_info.keys():
                 if key not in valid_keys:
                     return "Function call failed.", "Please provide a valid key from the following list: name, last_name, age, gender, location, occupation, interests"
 
             # Convert interests list to comma-separated string if provided
-            if "interests" in kwargs and isinstance(kwargs["interests"], list):
+            if "interests" in user_info and isinstance(user_info["interests"], list):
                 # Step 1: Fetch current interests from DB
                 query = "SELECT interests FROM user_info LIMIT 1;"
                 result = self.sql_manager.execute_query(query)
@@ -93,18 +91,18 @@ class UserManager:
 
                  # Step 2: Convert new interests to set
                 new_interests = [i.strip()
-                                 for i in kwargs["interests"] if isinstance(i, str)]
+                                 for i in user_info["interests"] if isinstance(i, str)]
 
                 # Step 3: Merge and remove duplicates
                 merged_interests = sorted(
                     set(existing_interests + new_interests))
 
                 # Step 4: Convert back to comma-separated string
-                kwargs["interests"] = ", ".join(merged_interests)
+                user_info["interests"] = ", ".join(merged_interests)
 
             # Prepare the SET clause
-            set_clause = ", ".join([f"{key} = ?" for key in kwargs.keys()])
-            params = tuple(kwargs.values())
+            set_clause = ", ".join([f"{key} = ?" for key in user_info.keys()])
+            params = tuple(user_info.values())
 
             query = f"""
             UPDATE user_info
