@@ -81,6 +81,7 @@ class Chatbot:
         while chat_state != "finished":
             try:
                 if function_call_state == "Function call successful.":
+                    chat_State = "finished"
                     if function_name == "add_user_info_to_database":
                         self.user_manager.refresh_user_info()
                     function_call_result_section = (
@@ -135,7 +136,7 @@ class Chatbot:
                     return assistant_response
 
                 elif response.choices[0].message.function_call:
-                    if function_call_count >= self.cfg.max_function_calls:
+                    if function_call_count >= self.cfg.max_function_calls or chat_State == "finished":
                         print("Trigerring the fallback model...")
                         fallback_response = self.client.chat.completions.create(
                             model=self.chat_model,
@@ -147,7 +148,6 @@ class Chatbot:
                         self.chat_history_manager.add_to_history(
                             user_message, assistant_response, self.max_history_pairs
                         )
-                        chat_state = "finished"
                         return assistant_response
 
                     function_call_count += 1
