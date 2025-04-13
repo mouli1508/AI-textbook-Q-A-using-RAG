@@ -59,7 +59,7 @@ class Chatbot:
         if function_name == "search_chat_history":
             return self.search_manager.search_chat_history(**function_args)
         elif function_name == "add_user_info_to_database":
-            return self.user_manager.add_user_info_to_database(**function_args)
+            return self.user_manager.add_user_info_to_database(function_args)
 
     def chat(self, user_message: str) -> str:
         """
@@ -151,6 +151,9 @@ class Chatbot:
                     function_name = response.choices[0].message.function_call.name
                     function_args = json.loads(
                         response.choices[0].message.function_call.arguments)
+                    print("Function name that was requested by the LLM:",
+                          function_name)
+                    print("Function arguments:", function_args)
                     function_call_state, function_call_result = self.execute_function_call(
                         function_name, function_args)
                 # Neither function call nor message content (edge case)

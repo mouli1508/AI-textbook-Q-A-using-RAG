@@ -65,8 +65,17 @@ class UserManager:
 
         Args:
             user_info (dict): Dictionary containing user attributes to update.
+
+        Examples:
+        >>> add_user_info_to_database({'interests': ['watching movies', 'talking']})
+        'User information updated successfully.'
+
+        >>> add_user_info_to_database({'location': 'Italy'})
+        'User information updated successfully.'
         """
         print("Entering the add user info function")
+        print("user_info:", user_info)
+        print(type(user_info))
         try:
             valid_keys = {"name", "last_name", "age", "gender",
                           "location", "occupation", "interests"}
@@ -75,31 +84,37 @@ class UserManager:
                 if key not in valid_keys:
                     return "Function call failed.", "Please provide a valid key from the following list: name, last_name, age, gender, location, occupation, interests"
 
-            # Convert interests list to comma-separated string if provided
-            if "interests" in user_info and isinstance(user_info["interests"], list):
-                # Step 1: Fetch current interests from DB
+            processed_info = user_info.copy()
+
+            # Handle merging interests if present
+            if "interests" in processed_info:
+                # Handle both string and list formats for interests
+                new_interests = []
+                if isinstance(processed_info["interests"], list):
+                    new_interests = [
+                        i.strip() for i in processed_info["interests"] if isinstance(i, str)]
+                elif isinstance(processed_info["interests"], str):
+                    new_interests = [i.strip()
+                                     for i in processed_info["interests"].split(',')]
+
                 query = "SELECT interests FROM user_info LIMIT 1;"
                 result = self.sql_manager.execute_query(query)
-
                 existing_interests = []
-                if result and result[0]:
+                if result and result[0] and result[0][0]:
                     existing_interests = [
-                        i.strip() for i in result[0].split(",") if i.strip()]
+                        i.strip() for i in result[0][0].split(",") if i.strip()]
 
-                 # Step 2: Convert new interests to set
-                new_interests = [i.strip()
-                                 for i in user_info["interests"] if isinstance(i, str)]
-
-                # Step 3: Merge and remove duplicates
                 merged_interests = sorted(
                     set(existing_interests + new_interests))
+                processed_info["interests"] = ", ".join(merged_interests)
 
-                # Step 4: Convert back to comma-separated string
-                user_info["interests"] = ", ".join(merged_interests)
+            # Prepare SQL SET clause
+            set_clause = ", ".join(
+                [f"{key} = ?" for key in processed_info.keys()])
+            params = tuple(processed_info.values())
 
-            # Prepare the SET clause
-            set_clause = ", ".join([f"{key} = ?" for key in user_info.keys()])
-            params = tuple(user_info.values())
+            if not set_clause:  # Check if there's anything to update
+                return "No valid fields to update."
 
             query = f"""
             UPDATE user_info
@@ -110,4 +125,5 @@ class UserManager:
             self.sql_manager.execute_query(query, params)
             return "Function call successful.", "User information updated."
         except Exception as e:
+            print(f"Error: {e}")
             return "Function call failed.", f"Error: {e}"
