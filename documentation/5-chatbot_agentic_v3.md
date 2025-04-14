@@ -74,6 +74,8 @@ That means the next time the user asks a related question, the chatbot can recal
 | **Function Calling** | ❌ None | ✅ Basic agent functions | ✅ Includes vector DB search |
 | **Tools** | None | `add_user_info_to_database`, `search_chat_history` | `add_user_info_to_database`, `search_vector_db` |
 | **Search Capability** | ❌ None | ✅ Keyword/phrase-based search on SQL database (not semantic) | ✅ Semantic search using vector embeddings (stored in a vector database) |
+| **Prompt Strategy** | Simple prompt | Prompt with function call context | Prompt with function call context
+| **Fallback Strategy** | ❌ None | ✅ Includes a fallback mechanism| ✅ Includes a fallback mechanism|
 | **Memory System** | Chat history + summary | Chat history + summary + **SQL db search result** | Chat hirsoty + summary + **long-term memory (vector DB)** |
 | **System Prompt** | `prepare_system_prompt` | `prepare_system_prompt_for_agentic_chatbot_v1` | `...v2` with vector support context |
 | **Knowledge Retention** | Temporary, short-term | Contextually limited | **Semantically indexed for long-term reasoning** |
@@ -97,4 +99,4 @@ This is the blueprint for building **truly intelligent assistants** — not just
 
 Here's the architecture of Agentic Chatbot v3:
 
-![Agentic Chatbot v3 Schema](../images/chatbot_v3.png)
+![Agentic Chatbot v3 Schema](../images/chatbot_agentic_v3.png)
