@@ -16,3 +16,4 @@ langmem==0.0.16
 ipykernel==6.29.5
 SQLAlchemy
 db-sqlite3
+langchain_community

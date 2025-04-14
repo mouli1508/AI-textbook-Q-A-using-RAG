@@ -38,7 +38,7 @@ LangChain currently supports **two distinct memory strategies**, and we'll explo
 
 ## 🧠 Strategy 1: Hybrid Memory with Vector + Graph Databases
 
-![LangChain Memory Architecture](../images/langgraph_tutorial.png)
+![LangChain Memory Architecture](../images/langgraph_1.png)
 
 This architecture uses a **hybrid memory system**:
 
