@@ -142,6 +142,8 @@ class Chatbot:
                     msg_pair = f"user: {user_message}, assistant: {assistant_response}"
                     self.vector_db_manager.update_vector_db(
                         msg_pair)
+                    function_call_state = None
+                    self.vector_db_manager.refresh_vector_db_client()
                     return assistant_response
 
                 elif response.choices[0].message.function_call:
@@ -160,6 +162,8 @@ class Chatbot:
                         msg_pair = f"user: {user_message}, assistant: {assistant_response}"
                         self.vector_db_manager.update_vector_db(
                             msg_pair)
+                        function_call_state = None
+                        self.vector_db_manager.refresh_vector_db_client()
                         return assistant_response
 
                     function_call_count += 1

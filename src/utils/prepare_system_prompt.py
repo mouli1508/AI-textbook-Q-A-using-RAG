@@ -119,12 +119,8 @@ def prepare_system_prompt_for_agentic_chatbot_v3(user_info: str, chat_summary: s
 def prepare_system_prompt_for_rag_chatbot() -> str:
     prompt = """You will receive a user query and the search results retrieved from a chat history vector database. The search results will include the most likely relevant responses to the query.
 
-    Your task is to:
+    Your task is to summarize the key information from both the query and the search results in a clear and concise manner.
 
-    1- Summarize the key information from both the query and the search results in a clear and concise manner.
-    2- Identify and explain the relevant details from the search results that directly answer or satisfy the query.
-    3- If some parts of the search results are irrelevant or unhelpful, ignore them and focus only on the most relevant and useful information.
-    
     Remember keep it concise and focus on the most relevant information."""
 
     return prompt

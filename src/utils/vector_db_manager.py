@@ -102,3 +102,13 @@ class VectorDBManager:
                       {"role": "user", "content": input}]
         )
         return response.choices[0].message.content
+
+    def refresh_vector_db_client(self):
+        self.db_client = chromadb.PersistentClient(
+            path=str(self.cfg.vectordb_dir))
+        self.db_collection = self.db_client.get_or_create_collection(
+            name=self.cfg.collection_name,
+            embedding_function=self.embedding_function,
+        )
+
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
