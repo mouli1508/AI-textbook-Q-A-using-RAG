@@ -99,4 +99,4 @@ This is the blueprint for building **truly intelligent assistants** — not just
 
 Here's the architecture of Agentic Chatbot v3:
 
-![Agentic Chatbot v3 Schema](../images/chatbot_agentic_v3.png)
+![Agentic Chatbot v3 Schema](../images/agentic_chatbot_v3.png)
