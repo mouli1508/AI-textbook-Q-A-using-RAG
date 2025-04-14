@@ -74,7 +74,7 @@ class VectorDBManager:
             print("Query: ", query)
             print("Results: ", results)
             print(f"LLM result: {llm_result}")
-            return "function call successful.", llm_result
+            return "Function call successful.", llm_result
         except Exception as e:
             return "function call failed.", f"Error: {e}"
 
