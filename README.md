@@ -63,15 +63,15 @@ PDF available in the repo: `letta/MemGPT_Paper.pdf`
 
 **Agentic_Chatbot_v2 Schema**
 
-![Schema 4](images/chatbot_v2.png)
+![Schema 4](images/chatbot_agentic_v2.png)
 
 **Agentic_Chatbot_v3 Schema**
 
-![Schema 5](images/chatbot_v3.png)
+![Schema 5](images/agentic_chatbot_v3.png)
 
 **Longterm Memory with Graph DB and Vector DB using LangGraph**
 
-![Schema 6](images/langgraph_tutorial.png)
+![Schema 6](images/langgraph_1.png)
 
 **Longterm Memory (Semantic, Episodical, and Procedural) with LangGraph**
 
