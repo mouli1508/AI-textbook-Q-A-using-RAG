@@ -2,6 +2,7 @@ from typing import Optional, List
 from openai import OpenAI
 from utils.sql_manager import SQLManager
 from utils.utils import Utils
+import json
 
 
 class ChatHistoryManager:
@@ -146,7 +147,7 @@ class ChatHistoryManager:
             print("Insufficient chat data. Skipping summary.")
             return
 
-        summary_text = self.generate_summary_based_on_characters(
+        summary_text = self.generate_the_new_summary(
             self.client, self.summary_model, chat_data, previous_summary)
         # print("Generated summary:", summary_text)
 
@@ -155,7 +156,7 @@ class ChatHistoryManager:
             self.pairs_since_last_summary = 0  # Reset the counter after a summary
             print("Chat history summary generated and saved to database.")
 
-    def generate_summary_based_on_characters(
+    def generate_the_new_summary(
         self,
         client: OpenAI,
         summary_model: str,
@@ -226,7 +227,6 @@ class ChatHistoryManager:
                 ],
                 max_tokens=300
             )
-            import json
             summarized_pairs = response.choices[0].message.content
             summarized_pairs = json.loads(summarized_pairs)
 
