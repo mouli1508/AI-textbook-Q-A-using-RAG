@@ -75,7 +75,9 @@ PDF available in the repo: `letta/MemGPT_Paper.pdf`
 
 **Longterm Memory (Semantic, Episodical, and Procedural) with LangGraph**
 
-![Schema 7](images/langgraph_course.png)
+![Schema 7](images/langgraph_course_theory.png)
+
+![Schema 8](images/langgraph_course_schema.png)
 
 🧩 Technologies Used
 - Python
@@ -125,7 +127,8 @@ images/
 ├── requirements.txt
 ```
 **`src` Folder Structure**
-![Schema 8](images/src_structure.png)
+
+![Schema 9](images/src_structure.png)
 
 
 
