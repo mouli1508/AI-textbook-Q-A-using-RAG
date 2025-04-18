@@ -71,7 +71,7 @@ PDF available in the repo: `letta/MemGPT_Paper.pdf`
 
 **Longterm Memory with Graph DB and Vector DB using LangGraph**
 
-![Schema 6](images/langgraph_1.png)
+![Schema 6](images/langgraph_1_schema.png)
 
 **Longterm Memory (Semantic, Episodical, and Procedural) with LangGraph**
 
