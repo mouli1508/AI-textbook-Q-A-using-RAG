@@ -17,14 +17,14 @@ As this space matures, choosing the right foundation becomes critical for long-t
 LeTTA introduced many of the ideas that pushed the field of long-term agentic memory forward.  
 They've published a framework that embodies their research and philosophy.
 
-However, I personally **do not recommend using the LeTTA framework for production systems**, and here's why:
+However, I personally do not recommend using Leda as an out-of-the-box solution in production environments, and here's why:
 
 - ⚠️ It's relatively **new** and **immature** in terms of ecosystem and tooling
 - 🧩 Larger, well-supported platforms like LangChain already offer **equivalent capabilities**
 - 🧪 The **sample code** they provided in their public course **is already outdated and non-functional**
 - 🔧 Debugging and extending the framework may require significant manual effort
 
-You're free to explore and learn from it — but for production-level reliability, I'd recommend more mature options.
+GitHub repository: [Link](https://github.com/letta-ai/letta)
 
 ---
 
