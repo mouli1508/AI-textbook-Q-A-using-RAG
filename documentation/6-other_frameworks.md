@@ -12,7 +12,7 @@ As this space matures, choosing the right foundation becomes critical for long-t
 
 ---
 
-## 🥇 LeTTA
+## 🥇 LeTTA: Ideal for Custom-Built Long-Term Memory Solutions
 
 LeTTA introduced many of the ideas that pushed the field of long-term agentic memory forward.  
 They've published a framework that embodies their research and philosophy.
@@ -28,7 +28,7 @@ You're free to explore and learn from it — but for production-level reliabilit
 
 ---
 
-## 🔄 LangChain: My Suggested Framework
+## 🔄 LangChain: Reliable Long-Term Memory Out-of-the-Box
 
 While developing this project, I noticed that **LangChain introduced built-in support for long-term memory** in its agent framework — and it's both robust and well-documented.
 
