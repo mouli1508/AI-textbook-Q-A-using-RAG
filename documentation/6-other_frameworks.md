@@ -28,7 +28,7 @@ You're free to explore and learn from it — but for production-level reliabilit
 
 ---
 
-## 🔄 LangChain: The Production-Ready Option
+## 🔄 LangChain: My Suggested Framework
 
 While developing this project, I noticed that **LangChain introduced built-in support for long-term memory** in its agent framework — and it's both robust and well-documented.
 
