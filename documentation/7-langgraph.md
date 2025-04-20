@@ -67,7 +67,7 @@ It can:
 
 ![LangChain Memory Strategy Schema](../images/langgraph_course_theory.png)
 
-![LangChain Memory Strategy Theory](../images/langgraph_course_schema.png)
+![LangChain Memory Strategy Theory](../images/langgraph_2_schema.png)
 
 This architecture supports:
 - Adaptive memory routing

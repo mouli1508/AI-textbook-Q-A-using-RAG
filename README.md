@@ -77,7 +77,7 @@ PDF available in the repo: `letta/MemGPT_Paper.pdf`
 
 ![Schema 7](images/langgraph_course_theory.png)
 
-![Schema 8](images/langgraph_course_schema.png)
+![Schema 8](images/langgraph_2_schema.png)
 
 🧩 Technologies Used
 - Python
