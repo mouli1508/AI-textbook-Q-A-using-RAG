@@ -32,11 +32,13 @@ This design was shared by LangChain's CEO during a course with DeepLearning.AI, 
 
 ## ⚙️ How It Works — The Memory Pipeline
 
-LangChain uses a **multi_prompt_optimizer LLM** to decide where new memories (user feedbacks) should go:
 
-- Is it a fact? → Implement it in **Semantic Memory** (This is implemented within the tools that we pass to the agent.)
-- Is it a past event or story? → Implement it in **Episodic Memory**
+- Is it a fact? → Implement it in **Semantic Memory** (This is implemented within the tools that we provide to the agent.)
+- Is it a past event or story? → Implement it in **Episodic Memory** (This includes the few-shot examples provided by the user and stored in the vector database. The user can also add more examples over time.)
 - Is it behavioral guidance? → Implement it in **Procedural Memory**
+LangChain uses a **multi_prompt_optimizer** LLM. When the user provides feedback to adjust the behavior of the two agents, this LLM decides which agent’s prompt should be updated and how to update it.
+
+
 
 Then, when the user sends a new message:
 1. The system **analyzes and routes the memory** appropriately
