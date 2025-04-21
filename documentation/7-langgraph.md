@@ -32,11 +32,11 @@ This design was shared by LangChain's CEO during a course with DeepLearning.AI, 
 
 ## ⚙️ How It Works — The Memory Pipeline
 
-LangChain uses a **triage mechanism** to decide where new memories should go:
+LangChain uses a **multi_prompt_optimizer LLM** to decide where new memories (user feedbacks) should go:
 
-- Is it a fact? → Store in **Semantic Memory**
-- Is it a past event or story? → Store in **Episodic Memory**
-- Is it behavioral guidance? → Store in **Procedural Memory**
+- Is it a fact? → Implement it in **Semantic Memory** (This is implemented within the tools that we pass to the agent.)
+- Is it a past event or story? → Implement it in **Episodic Memory**
+- Is it behavioral guidance? → Implement it in **Procedural Memory**
 
 Then, when the user sends a new message:
 1. The system **analyzes and routes the memory** appropriately
