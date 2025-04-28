@@ -15,7 +15,7 @@ Feel free to ⭐️ the repo if it helps you understand long-term memory for age
 PDF available in the repo: `letta/MemGPT_Paper.pdf`
 
 ## ▶️ Watch the Demo  
-📺 **YouTube Video:** _Coming soon..._
+📺 **YouTube Video:** [Link](https://youtu.be/jw67V_gBzR0?si=OagwK44anyRoLimE)
 
 
 ## 💾 How to Run the Project
@@ -77,7 +77,7 @@ PDF available in the repo: `letta/MemGPT_Paper.pdf`
 
 ![Schema 7](images/langgraph_course_theory.png)
 
-![Schema 8](images/langgraph_2_schema.png)
+![Schema 8](images/langgraph_2_updated.png)
 
 🧩 Technologies Used
 - Python
