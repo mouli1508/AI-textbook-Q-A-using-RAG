@@ -7,7 +7,8 @@ from chromadb.utils import embedding_functions
 from dotenv import load_dotenv
 from pyprojroot import here
 
-load_dotenv(here("../.env"))
+# load_dotenv(here("../.env"))
+load_dotenv(here(".env"))
 
 CFG = Config()
 openai_embedding_function = embedding_functions.OpenAIEmbeddingFunction(
