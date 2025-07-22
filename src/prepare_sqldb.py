@@ -86,7 +86,7 @@ def create_user_info():
     # Insert Sample User if Not Exists (leaving age, gender, interests empty)
     cursor.execute("""
     INSERT INTO user_info (name, last_name, occupation, location, age, gender, interests)
-    SELECT 'Farzad', 'Roozitalab', 'Senior ML Engineer', 'Canada', NULL, NULL, NULL
+    SELECT 'Mouli', 'Prabhakaran', 'AI Engineer', 'Novi', NULL, 'Male', 'Agentic AI'
     WHERE NOT EXISTS (SELECT 1 FROM user_info);
     """)
 
